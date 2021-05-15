@@ -1,8 +1,7 @@
 {
-  "name": "[PACKAGE]",
+  "name": "@commandville/main",
   "version": "0.0.1",
-  "description": "[DESCRIPTION]",
-  "main": "index.js",
+  "description": "CLI command runner",
   "scripts": {
     "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,16 +17,6 @@
     "release:version": "changeset version",
     "release:package": "pnpm release:package -r parallel"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://[REPO].git"
-  },
-  "author": "Derek Worthen <worthend.derek@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://[REPO]/issues"
-  },
-  "homepage": "https://[REPO]#readme",
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
     "@typescript-eslint/eslint-plugin": "^4.23.0",

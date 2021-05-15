@@ -1,10 +1,8 @@
 {
-  "name": "[PACKAGE]",
+  "name": "@commandville/core",
   "version": "0.0.1",
-  "description": "[DESCRIPTION]",
-  "main": "[NODE_CJS_ENTRY_FILE]",
-  "module": "[ESM_ENTRY_FILE]",
-  "browser": "[BROWSER_ENTRY_FILE]",
+  "description": "CLI command runner",
+  "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "files": [
     "dist/",
@@ -26,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://[REPO].git"
+    "url": "git+https://github.com/dworthen/monorepo.git"
   },
   "keywords": [
     "commandville",
@@ -35,9 +33,9 @@
   "author": "Derek Worthen <worthend.derek@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://[REPO]/issues"
+    "url": "https://github.com/dworthen/monorepo/issues"
   },
-  "homepage": "https://[REPO]#readme",
+  "homepage": "https://github.com/dworthen/monorepo#readme",
   "devDependencies": {
     "@jsdevtools/npm-publish": "^1.4.3",
     "esbuild": "^0.11.17",
