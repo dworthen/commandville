@@ -27,7 +27,7 @@
     "watch:types": "pnpm build:types -- --watch",
     "watch:package": "pnpm build:package -- --watch",
     "start": "run-p watch:types watch:package",
-    "release:package": "npm-publish --token $NPM_TOKEN ./package.json"
+    "release:package": "npm-publish --token $NPM_TOKEN --access public ./package.json"
   },
   "repository": {
     "type": "git",

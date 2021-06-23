@@ -15,7 +15,7 @@
     "ci:staged": "lint-staged",
     "release:changeset": "changeset",
     "release:version": "changeset version",
-    "release:package": "pnpm release:package -r parallel"
+    "release:package": "pnpm release:package -r --parallel"
   },
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
