@@ -2,7 +2,8 @@ import type { Command } from '../command/types'
 
 export interface ProgramDescription {
   program: string
-  commands: Array<Command<any>>
+  commands: Command[]
+  cwd?: string
   defaultCommand?: string
   version?: string
   config?: Record<string, unknown>

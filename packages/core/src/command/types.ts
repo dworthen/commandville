@@ -3,8 +3,8 @@ import type { Choices } from 'yargs'
 
 export interface CommandOption {
   description: string
-  aliases?: string | string[]
   type: 'string' | 'number' | 'boolean' | 'count'
+  aliases?: string | string[]
   array?: boolean
   choices?: Choices
   configParser?: (configPath: string) => object
@@ -19,10 +19,6 @@ export interface CommandOption {
   normalize?: boolean
   deprecated?: boolean
 }
-
-// export interface CommandOptions {
-//   [key: string]: CommandOption
-// }
 
 export type CommandOptions = Record<string, CommandOption>
 
@@ -50,10 +46,10 @@ export interface CommandDescription {
 }
 
 export interface Command<
-  R extends StreamParser | AsyncParser | Parser,
+  R extends StreamParser | AsyncParser | Parser = CliParser,
   T extends CommandConfig = CommandConfig,
 > extends CommandDescription {
-  (configOptions?: T): R
+  (configOptions: T): R
 }
 
 export type CliHandler = (args: Record<string, unknown>) => Promise<void> // eslint-disable-line
