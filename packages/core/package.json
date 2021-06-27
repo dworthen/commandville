@@ -13,9 +13,6 @@
     "LICENSE",
     "README.md"
   ],
-  "bin": {
-    "cmv": "./dist/program/load.js"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "shx rm -rf dist",
