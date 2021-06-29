@@ -33,9 +33,9 @@ jobs:
 
       - name: Lint
         run: |
-          pnpm format:check
           pnpm lint:check
-          
+          pnpm format:check
+
       - name: build
         run: pnpm build --filter ./packages
 
@@ -44,7 +44,7 @@ jobs:
         run: pnpm release:npm
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
+
       - name: Docs
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: |
