@@ -1,5 +1,13 @@
 # commandville
 
+## 0.0.5
+
+### Patch Changes
+
+- 59941ee: chore: update release pipeline
+- Updated dependencies [59941ee]
+  - @commandville/core@0.1.2
+
 ## 0.0.4
 
 ### Patch Changes

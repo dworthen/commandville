@@ -1,6 +1,6 @@
 {
   "name": "@commandville/transform",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "utility for creating Node transform streams.",
   "type": "module",
   "exports": "./dist/index.js",

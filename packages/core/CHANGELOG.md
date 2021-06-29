@@ -1,5 +1,11 @@
 # @commandville/core
 
+## 0.1.2
+
+### Patch Changes
+
+- 59941ee: chore: update release pipeline
+
 ## 0.1.1
 
 ### Patch Changes
