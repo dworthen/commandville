@@ -9,8 +9,6 @@ on:
       - 'release/*'
   pull_request:
     branches: [main]
-  release:
-    types: [created]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,17 +45,17 @@ jobs:
           NODE_ENV: production
 
       - name: Release
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' && startsWith(github.ref, 'refs/heads/release/') }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
         run: pnpm release:package
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build docs
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' && startsWith(github.ref, 'refs/heads/release/') }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
         run: pnpm build --filter @commandville/docs
 
       - name: Release Docs
-        if: ${{ github.event_name == 'release' && github.event.action == 'created' && startsWith(github.ref, 'refs/heads/release/') }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           pnpm release:docs -- -- -u "github-actions-bot <support+actions@github.com>"
