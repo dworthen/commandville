@@ -1,11 +1,14 @@
-name: Release
+name: CI
 
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
 on:
-  workflow_run:
-    workflows: [Build]
-    branches: 'release/*'
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - 'release/*'
+  pull_request:
+    branches: [main]
   release:
     types: [created]
 
@@ -44,18 +47,19 @@ jobs:
           NODE_ENV: production
 
       - name: Release
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' && startsWith(github.ref, 'refs/heads/release/') }}
         run: pnpm release:package
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build docs
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' && startsWith(github.ref, 'refs/heads/release/') }}
         run: pnpm build --filter @commandville/docs
 
       - name: Release Docs
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'created' && startsWith(github.ref, 'refs/heads/release/') }}
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          pnpm release:docs -- -u "github-actions-bot <support+actions@github.com>"
+          pnpm release:docs -- -- -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
