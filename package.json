@@ -18,7 +18,7 @@
     "ci:staged": "lint-staged",
     "release:changesets": "changeset",
     "release:versions": "changeset version",
-    "release:packages": "pnpm publish -r --access public --filter ./packages",
+    "release:packages": "pnpm publish -r --access public --publish-branch release/* --filter ./packages",
     "release:docs": "pnpm release --filter @commandville/docs"
   },
   "devDependencies": {
