@@ -1,5 +1,11 @@
 # commandville
 
+## 0.0.4
+
+### Patch Changes
+
+- 62842cb: chore: update dependencies
+
 ## 0.0.3
 
 ### Patch Changes
