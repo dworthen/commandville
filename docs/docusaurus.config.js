@@ -14,11 +14,11 @@ module.exports = {
   projectName: 'commandville', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Site',
-      logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
-      },
+      title: 'Commandville',
+      // logo: {
+      //   alt: 'My Site Logo',
+      //   src: 'img/logo.svg',
+      // },
       items: [
         {
           type: 'doc',
@@ -28,7 +28,7 @@ module.exports = {
         },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/dworthen/commandville',
           label: 'GitHub',
           position: 'right',
         },
