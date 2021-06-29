@@ -15,7 +15,8 @@
     "ci:staged": "lint-staged",
     "release:changeset": "changeset",
     "release:version": "changeset version",
-    "release:package": "pnpm release:package -r"
+    "release:package": "pnpm release:package -r",
+    "release:docs": "pnpm release --filter @commandville/docs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
