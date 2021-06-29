@@ -37,7 +37,7 @@ export type CliParser = StreamParser | AsyncParser | Parser
 
 export interface CommandDescription {
   command: string
-  description: string
+  description?: string
   aliases?: string | string[]
   deprecated?: boolean
   options?: CommandOptions

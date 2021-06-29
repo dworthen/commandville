@@ -139,8 +139,7 @@ function isJsOrTs(path: string): boolean {
 function isCommand(command: unknown): command is Command {
   return (
     typeof command === 'function' &&
-    typeof (command as Command).command === 'string' &&
-    typeof (command as Command).description === 'string'
+    typeof (command as Command).command === 'string'
   )
 }
 

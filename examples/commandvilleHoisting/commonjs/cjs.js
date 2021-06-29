@@ -14,7 +14,6 @@ const streamCmd = function streamCmd() {
 }
 
 streamCmd.command = 'stream-command'
-streamCmd.description = 'Cool description'
 
 module.exports.streamCmd = streamCmd
 module.exports.testFn = function () {

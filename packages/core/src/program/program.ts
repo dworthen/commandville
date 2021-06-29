@@ -55,7 +55,7 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   }
 
   function _loadCommand(cmd: Command): void {
-    const { command, aliases, description, deprecated, options } = cmd
+    const { command, aliases, description = '', deprecated, options } = cmd
 
     prog = prog.command({
       command,
