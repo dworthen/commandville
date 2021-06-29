@@ -16,6 +16,8 @@ load(
   },
 )
   .then(async ({ parse }) => {
+    // Needed for GH Actions.
+    // eslint-disable-next-line
     return await parse(process.argv.slice(2))
   })
   .catch((ex) => {
