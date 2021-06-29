@@ -15,8 +15,8 @@ load(
     program: 'cmv',
   },
 )
-  .then(async (parser) => {
-    return await parser.parse(process.argv.slice(2))
+  .then(async ({ parse }) => {
+    return await parse(process.argv.slice(2))
   })
   .catch((ex) => {
     throw ex
