@@ -42,6 +42,7 @@ importers:
 
   docs:
     specifiers:
+      '@commandville/transform': '*'
       '@docusaurus/core': 2.0.0-beta.1
       '@docusaurus/preset-classic': 2.0.0-beta.1
       '@mdx-js/react': ^1.6.21
@@ -66,6 +67,7 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       url-loader: 4.1.1_file-loader@6.2.0
     devDependencies:
+      '@commandville/transform': link:../packages/transform
       gh-pages: 3.2.3
       shx: 0.3.3
 
