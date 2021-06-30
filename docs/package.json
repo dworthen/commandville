@@ -3,10 +3,10 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "clean": "shx rm -rf ./build",
+    "clean:docs": "shx rm -rf ./build",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "build:docs": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "release": "gh-pages -d ./build -t",
     "serve": "docusaurus serve",
@@ -38,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "@commandville/transform": "*",
     "gh-pages": "^3.2.3",
     "shx": "^0.3.3"
   }
