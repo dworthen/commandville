@@ -52,7 +52,7 @@ jobs:
 
       - name: Build docs
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
-        run: pnpm build --filter @commandville/docs
+        run: pnpm build:docs
 
       - name: Release Docs
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
