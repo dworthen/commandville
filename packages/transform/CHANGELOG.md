@@ -1,5 +1,11 @@
 # @commandville/transform
 
+## 0.0.4
+
+### Patch Changes
+
+- 8349f69: docs: update doc pipeline
+
 ## 0.0.3
 
 ### Patch Changes
