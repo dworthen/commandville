@@ -20,13 +20,12 @@ module.exports = {
       //   src: 'img/logo.svg',
       // },
       items: [
-        {
-          type: 'doc',
-          docId: 'intro',
-          position: 'left',
-          label: 'Tutorial',
-        },
-        { to: '/blog', label: 'Blog', position: 'left' },
+        // {
+        //   type: 'doc',
+        //   docId: 'intro',
+        //   position: 'left',
+        //   label: 'Tutorial',
+        // },
         {
           href: 'https://github.com/dworthen/commandville',
           label: 'GitHub',
@@ -34,51 +33,52 @@ module.exports = {
         },
       ],
     },
-    footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-    },
+    footer: {},
+    // footer: {
+    //   style: 'dark',
+    //   links: [
+    //     {
+    //       title: 'Docs',
+    //       items: [
+    //         {
+    //           label: 'Tutorial',
+    //           to: '/docs/intro',
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       title: 'Community',
+    //       items: [
+    //         {
+    //           label: 'Stack Overflow',
+    //           href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+    //         },
+    //         {
+    //           label: 'Discord',
+    //           href: 'https://discordapp.com/invite/docusaurus',
+    //         },
+    //         {
+    //           label: 'Twitter',
+    //           href: 'https://twitter.com/docusaurus',
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       title: 'More',
+    //       items: [
+    //         {
+    //           label: 'Blog',
+    //           to: '/blog',
+    //         },
+    //         {
+    //           label: 'GitHub',
+    //           href: 'https://github.com/facebook/docusaurus',
+    //         },
+    //       ],
+    //     },
+    //   ],
+    //   copyright: `Copyright © ${new Date().getFullYear()} Commandville`,
+    // },
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
@@ -90,16 +90,11 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          routeBasePath: '/',
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+          editUrl: 'https://github.com/dworthen/commandville/edit/main/docs',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
