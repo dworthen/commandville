@@ -45,7 +45,8 @@
   },
   "homepage": "https://github.com/dworthen/commandville#readme",
   "dependencies": {
-    "@commandville/core": "^0.1.2"
+    "@commandville/core": "^0.1.2",
+    "find-up": "^5.0.0"
   },
   "devDependencies": {
     "@jsdevtools/npm-publish": "^1.4.3",

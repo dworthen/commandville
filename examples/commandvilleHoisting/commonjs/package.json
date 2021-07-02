@@ -1,0 +1,13 @@
+{
+  "commandville": {
+    "commands": [
+      "./*.js"
+    ],
+    "config": {
+      "flagOne": "flag value"
+    },
+    "loadEnv": true,
+    "envPrefix": "CLI",
+    "envFile": "cli.env"
+  }
+}

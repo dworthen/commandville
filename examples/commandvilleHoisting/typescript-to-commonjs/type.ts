@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { Transform } from 'stream'
 import { func } from './type2'
 import { resolve } from 'path'

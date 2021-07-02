@@ -2,7 +2,10 @@ const Transform = require('stream').Transform
 const func = require('./cjs2').func
 const path = require('path')
 
-const streamCmd = function streamCmd() {
+const streamCmd = function streamCmd(c) {
+  console.log(c.nameOne)
+  console.log(c.flagOne)
+  console.log(c.last)
   return new Transform({
     objectMode: true,
     transform(chunk, encoding, cb) {
@@ -14,6 +17,20 @@ const streamCmd = function streamCmd() {
 }
 
 streamCmd.command = 'stream-command'
+streamCmd.options = {
+  'name-one': {
+    description: 'username',
+    type: 'string',
+  },
+  flagOne: {
+    description: 'flagOne',
+    type: 'string',
+  },
+  last: {
+    description: 'last',
+    type: 'string',
+  },
+}
 
 module.exports.streamCmd = streamCmd
 module.exports.testFn = function () {
