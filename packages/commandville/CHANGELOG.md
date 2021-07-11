@@ -1,5 +1,23 @@
 # commandville
 
+## 0.1.0
+
+### Minor Changes
+
+- 1db0827: feat: simplify load signature
+- 3d4618c: feat: load config files
+
+  Add:
+
+  - load config from commandville key of package.json
+  - load config from .commandville.json file
+
+### Patch Changes
+
+- Updated dependencies [1db0827]
+- Updated dependencies [3d4618c]
+  - @commandville/core@0.2.0
+
 ## 0.0.5
 
 ### Patch Changes
