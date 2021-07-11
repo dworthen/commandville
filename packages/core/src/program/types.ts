@@ -9,7 +9,6 @@ export interface ProgramDescription {
   loadEnv?: boolean
   envPrefix?: string
   envFile?: string
-  envCwd?: string
 }
 
 export interface ProgramParser {

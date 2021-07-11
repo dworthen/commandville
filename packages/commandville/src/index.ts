@@ -65,7 +65,7 @@ async function run(argv: string[]): Promise<void> {
 
   function _setDefaultCommand(): void {
     commands.push({
-      path: `./*.{mjs,js${isTsEnabled() ? ',ts' : ''}}`,
+      filePathOrGlob: `./*.{mjs,js${isTsEnabled() ? ',ts' : ''}}`,
       cwd: process.cwd(),
     })
   }
@@ -76,14 +76,18 @@ async function run(argv: string[]): Promise<void> {
   }
   function _setCommands(cwd: string, localConfig?: CommandvilleConfig): void {
     commands =
-      localConfig?.commands?.map((path) => ({
-        path,
+      localConfig?.commands?.map((filePathOrGlob) => ({
+        filePathOrGlob,
         cwd,
       })) ?? commands
-    config = { ...config, ...localConfig, envCwd: cwd }
+    config = {
+      ...config,
+      ...localConfig,
+    }
   }
 
-  const { parse } = await load(commands, {
+  const { parse } = await load({
+    commands,
     program: 'cmv',
     version: cmvPkg.version,
     ...config,
