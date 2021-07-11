@@ -1,6 +1,6 @@
 {
   "name": "@commandville/core",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "CLI command runner",
   "type": "module",
   "exports": "./dist/index.js",
