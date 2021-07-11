@@ -18,12 +18,12 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   const {
     program,
     commands,
-    version,
+    version = '0',
     config,
     loadEnv = false,
-    envPrefix = 'CLI',
-    envFile = 'cli.env',
-    cwd = process.cwd(),
+    envPrefix = 'CMV',
+    envFile = 'cmv.env',
+    envCwd = process.cwd(),
   } = programDescription
 
   let prog = yargs([]).scriptName(program)
@@ -36,11 +36,11 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   commands.forEach(_loadCommand)
 
   function _setVersion(): void {
-    prog = prog.version(version as string)
+    prog = prog.version(version)
   }
 
   function _loadEnv(): void {
-    const envFilePath = envFile != null ? resolve(cwd, envFile) : null
+    const envFilePath = envFile != null ? resolve(envCwd, envFile) : null
     if (envFilePath != null && existsSync(envFilePath)) {
       const env = dotenv.config({
         path: envFilePath,
