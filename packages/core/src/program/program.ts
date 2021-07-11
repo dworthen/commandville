@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import dotenvExpand from 'dotenv-expand'
 import { existsSync } from 'fs'
-import { dirname, resolve } from 'path'
+import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import yargs from 'yargs'
 
@@ -23,7 +23,6 @@ export function program(programDescription: ProgramDescription): ProgramParser {
     loadEnv = false,
     envPrefix = 'CMV',
     envFile = 'cmv.env',
-    envCwd = process.cwd(),
   } = programDescription
 
   let prog = yargs([]).scriptName(program)
@@ -40,10 +39,9 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   }
 
   function _loadEnv(): void {
-    const envFilePath = envFile != null ? resolve(envCwd, envFile) : null
-    if (envFilePath != null && existsSync(envFilePath)) {
+    if (envFile != null && existsSync(envFile)) {
       const env = dotenv.config({
-        path: envFilePath,
+        path: envFile,
       })
       dotenvExpand(env)
     }

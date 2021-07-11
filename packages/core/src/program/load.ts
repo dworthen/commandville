@@ -10,53 +10,48 @@ import { ProgramDescription } from './types.js'
 type Module = Record<string, unknown>
 
 export interface CommandLocation {
-  path: string
+  filePathOrGlob: string
   prefix?: string
   cwd?: string
 }
+
+export interface ProgramLoader extends Omit<ProgramDescription, 'commands'> {
+  commands: Array<CommandLocation | string>
+}
 export async function load(
-  filePathOrCommandLocations: string | CommandLocation[],
-  options: Omit<ProgramDescription, 'commands'> = {
-    program: '',
-  },
+  options: ProgramLoader,
 ): Promise<{ parse: (argv: string[]) => Promise<void> }> {
-  if (typeof filePathOrCommandLocations === 'string') {
-    const commands = await _load(filePathOrCommandLocations, options)
-    return program({
-      ...options,
-      commands: [...commands.values()],
-    })
-  } else {
-    const commandMaps = await Promise.all(
-      filePathOrCommandLocations.map(async (commandLocation) => {
-        // eslint-disable-next-line
-        return _load(commandLocation.path, {
-          ...options,
-          ...commandLocation,
-        })
-      }),
-    )
-    const commands = commandMaps.reduce<Map<string, Command>>((acc, cur) => {
-      return new Map([...acc, ...cur])
-    }, new Map())
-    return program({
-      ...options,
-      commands: [...commands.values()],
-    })
+  const { commands: commandLocationsOrPaths } = options
+  const commandModules: Array<Map<string, Command>> = []
+
+  for (const cmdLocationOrString of commandLocationsOrPaths) {
+    if (isCommandLocation(cmdLocationOrString)) {
+      commandModules.push(await _load(cmdLocationOrString))
+    } else {
+      commandModules.push(await _load({ filePathOrGlob: cmdLocationOrString }))
+    }
   }
 
-  // if (isRecord(filePathOrCommandLocations)) {
+  const commands = commandModules.reduce<Map<string, Command>>((acc, cur) => {
+    return new Map([...acc, ...cur])
+  }, new Map())
+
+  return program({
+    ...options,
+    commands: [...commands.values()],
+  })
+
+  // if (typeof filePathOrCommandLocations === 'string') {
+  //   const commands = await _load(filePathOrCommandLocations, options)
+  //   return program({
+  //     ...options,
+  //     commands: [...commands.values()],
+  //   })
+  // } else {
   //   const commandMaps = await Promise.all(
-  //     Object.entries(filePathOrCommandLocations).map(async ([key, value]) => {
-  //       // if(isCommandArray(value)) {
-  //       //   return new Map<string, Command>((value.map(cmd => [`${key}:${cmd.command}`, cmd])))`
-  //       // } else {
-  //         // eslint-disable-next-line
-  //         return _load(value, {
-  //           ...options,
-  //           prefix: key,
-  //         })
-  //       // }
+  //     filePathOrCommandLocations.map(async (commandLocation) => {
+  //       // eslint-disable-next-line
+  //       return _load(commandLocation)
   //     }),
   //   )
   //   const commands = commandMaps.reduce<Map<string, Command>>((acc, cur) => {
@@ -66,42 +61,34 @@ export async function load(
   //     ...options,
   //     commands: [...commands.values()],
   //   })
-  // } else {
-  //   const commands = await _load(filePathOrCommandLocations, options)
-  //   return program({
-  //     ...options,
-  //     commands: [...commands.values()],
-  //   })
   // }
 }
 
-async function _load(
-  globOrFilePath: string,
-  options: Omit<ProgramDescription, 'commands'> & {
-    cwd?: string
-    prefix?: string
-  },
-): Promise<Map<string, Command>> {
-  const { cwd = process.cwd(), prefix = '' } = options
-  const potentialFile = resolve(cwd, globOrFilePath)
+async function _load({
+  filePathOrGlob,
+  cwd = process.cwd(),
+  prefix = '',
+}: CommandLocation): Promise<Map<string, Command>> {
+  const potentialFile = resolve(cwd, filePathOrGlob)
   const commands: Map<string, Command> = new Map()
 
   if (await isFile(potentialFile)) {
     await _processModule(potentialFile)
   } else {
-    globOrFilePath = globOrFilePath.replace(/\\/g, '/')
-    if (!glob.hasMagic(globOrFilePath)) {
-      globOrFilePath = `${globOrFilePath.replace(/\/$/, '')}/**`
+    filePathOrGlob = filePathOrGlob.replace(/\\/g, '/')
+    if (!glob.hasMagic(filePathOrGlob)) {
+      filePathOrGlob = `${filePathOrGlob.replace(/\/$/, '')}/**`
     }
 
     const files = glob
-      .sync(globOrFilePath, {
+      .sync(filePathOrGlob, {
         cwd,
         nodir: true,
       })
       .map((filePath) => resolve(cwd, filePath))
 
     for (const filePath of files) {
+      // TODO: Paralize loading modules.
       await _processModule(filePath)
     }
   }
@@ -143,13 +130,17 @@ function isCommand(command: unknown): command is Command {
   )
 }
 
-// function isRecord(
-//   fileOrGlobOrRecord: unknown,
-// ): fileOrGlobOrRecord is Record<string, string> {
-//   return (
-//     typeof fileOrGlobOrRecord === 'object' &&
-//     fileOrGlobOrRecord !== null &&
-//     fileOrGlobOrRecord.constructor === Object &&
-//     Object.prototype.toString.call(fileOrGlobOrRecord) === '[object Object]'
-//   )
-// }
+function isCommandLocation(command: unknown): command is CommandLocation {
+  return isRecord(command)
+}
+
+function isRecord(
+  fileOrGlobOrRecord: unknown,
+): fileOrGlobOrRecord is Record<string, string> {
+  return (
+    typeof fileOrGlobOrRecord === 'object' &&
+    fileOrGlobOrRecord !== null &&
+    fileOrGlobOrRecord.constructor === Object &&
+    Object.prototype.toString.call(fileOrGlobOrRecord) === '[object Object]'
+  )
+}
