@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - 'release/*'
   pull_request:
     branches: [main]
 
@@ -45,17 +44,17 @@ jobs:
           NODE_ENV: production
 
       - name: Release
-        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release/') }}
         run: pnpm release:package
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build docs
-        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release/') }}
         run: pnpm build:docs
 
       - name: Release Docs
-        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/') }}
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release/') }}
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           pnpm release:docs -- -- -u "github-actions-bot <support+actions@github.com>"
