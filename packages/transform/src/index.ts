@@ -1,5 +1,7 @@
 import { Duplex, Transform } from 'stream'
 
+import { hello } from './hello.js'
+export * from './hello.js'
 export type Transformer<T = unknown, R = unknown> = (chunk: T) => R | Promise<R>
 export type Flusher<R = unknown> = () => R | Promise<R>
 
@@ -7,6 +9,7 @@ export function transform<T = unknown, R1 = unknown, R2 = unknown>(
   transformer?: Transformer<T, R1>,
   flusher?: Flusher<R2>,
 ): Duplex {
+  hello({ name: 'Derek' })
   return new Transform({
     objectMode: true,
     async transform(chunk, enc, cb) {
