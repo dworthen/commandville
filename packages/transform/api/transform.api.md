@@ -8,35 +8,13 @@
 
 import { Duplex } from 'stream';
 
-// Warning: (ae-missing-release-tag) "Flusher" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
+// @public (undocumented)
+export type ChunkTransformer<T = unknown, R = unknown> = (chunk: T) => R | Promise<R>;
+
 // @public (undocumented)
 export type Flusher<R = unknown> = () => R | Promise<R>;
 
-// Warning: (ae-missing-release-tag) "hello" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function hello(person: Person): void;
-
-// Warning: (ae-missing-release-tag) "Person" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface Person {
-    // (undocumented)
-    name: string;
-}
-
-// Warning: (ae-missing-release-tag) "transform" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export function transform<T = unknown, R1 = unknown, R2 = unknown>(transformer?: Transformer_2<T, R1>, flusher?: Flusher<R2>): Duplex;
-
-// Warning: (ae-missing-release-tag) "Transformer" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-type Transformer_2<T = unknown, R = unknown> = (chunk: T) => R | Promise<R>;
-export { Transformer_2 as Transformer }
-
-// (No @packageDocumentation comment for this package)
+// @public
+export function transform<T = unknown, R1 = unknown, R2 = unknown>(transformer?: ChunkTransformer<T, R1>, flusher?: Flusher<R2>): Duplex;
 
 ```
