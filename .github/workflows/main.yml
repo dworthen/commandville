@@ -55,7 +55,7 @@ jobs:
 
       - name: Build docs
         if: ${{ github.event_name == 'release' }}
-        run: pnpm build:docs
+        run: pnpm run docs
 
       - name: Release Docs
         if: ${{ github.event_name == 'release' }}

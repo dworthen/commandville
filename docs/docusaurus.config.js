@@ -92,7 +92,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           // Please change this to your repo.
-          editUrl: 'https://github.com/dworthen/commandville/edit/main/docs',
+          // editUrl: 'https://github.com/dworthen/commandville/edit/main/docs',
         },
         blog: false,
         theme: {

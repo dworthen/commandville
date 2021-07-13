@@ -5,12 +5,13 @@
   "scripts": {
     "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "pnpm clean -r --parallel --filter ./packages",
-    "clean:docs": "pnpm clean:docs -r --parallel",
+    "clean": "pnpm clean -r --parallel",
     "build": "pnpm build -r --stream --filter ./packages",
-    "build:docs": "pnpm build:docs -r --stream",
+    "docs:build-packages": "pnpm run docs -r --stream --filter ./packages",
+    "docs:build-site": "pnpm build --filter docs",
+    "docs": "run-s docs:build-packages docs:build-site",
     "start": "pnpm start -r --parallel --filter ./packages",
-    "start:docs": "pnpm start --filter @commandville/docs",
+    "start:docs": "pnpm start --filter docs",
     "format:check": "prettier --check \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "lint:check": "eslint \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
@@ -19,7 +20,7 @@
     "release:changeset": "changeset",
     "release:version": "changeset version",
     "release:package": "pnpm release:package -r --filter ./packages",
-    "release:docs": "pnpm release --filter @commandville/docs"
+    "release:docs": "pnpm release --filter docs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
