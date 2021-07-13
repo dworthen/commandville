@@ -9,7 +9,8 @@ const streamCmd = function streamCmd(c) {
   return new Transform({
     objectMode: true,
     transform(chunk, encoding, cb) {
-      console.log(chunk)
+      console.log(Buffer.isBuffer(chunk))
+      console.log(chunk.toString('utf-8'))
       this.push(chunk)
       cb()
     },
