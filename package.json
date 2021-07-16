@@ -7,9 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "pnpm clean -r --parallel",
     "build": "pnpm build -r --stream --filter ./packages",
+    "docs:mkdir": "shx mkdir -p ../../docs/docs/api-input",
     "docs:build-packages": "pnpm run docs -r --stream --filter ./packages",
     "docs:build-site": "pnpm build --filter docs",
-    "docs": "run-s docs:build-packages docs:build-site",
+    "docs": "run-s docs:mkdir docs:build-packages docs:build-site",
     "start": "pnpm start -r --parallel --filter ./packages",
     "start:docs": "pnpm start --filter docs",
     "format:check": "prettier --check \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
@@ -42,6 +43,7 @@
     "lint-staged": "^11.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
+    "shx": "^0.3.3",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   }
