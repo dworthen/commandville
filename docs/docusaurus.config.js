@@ -20,12 +20,18 @@ module.exports = {
       //   src: 'img/logo.svg',
       // },
       items: [
-        // {
-        //   type: 'doc',
-        //   docId: 'intro',
-        //   position: 'left',
-        //   label: 'Tutorial',
-        // },
+        {
+          type: 'doc',
+          docId: 'docs/intro',
+          position: 'right',
+          label: 'Docs',
+        },
+        {
+          type: 'doc',
+          docId: 'api/index',
+          position: 'right',
+          label: 'API',
+        },
         {
           href: 'https://github.com/dworthen/commandville',
           label: 'GitHub',

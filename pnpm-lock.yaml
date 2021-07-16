@@ -19,6 +19,7 @@ importers:
       lint-staged: ^11.0.0
       npm-run-all: ^4.1.5
       prettier: ^2.3.2
+      shx: ^0.3.3
       ts-node: ^9.1.1
       typescript: ^4.2.4
     devDependencies:
@@ -37,6 +38,7 @@ importers:
       lint-staged: 11.0.0
       npm-run-all: 4.1.5
       prettier: 2.3.2
+      shx: 0.3.3
       ts-node: 9.1.1_typescript@4.2.4
       typescript: 4.2.4
 
@@ -46,10 +48,12 @@ importers:
       '@docusaurus/core': 2.0.0-beta.3
       '@docusaurus/preset-classic': 2.0.0-beta.3
       '@mdx-js/react': ^1.6.22
+      '@microsoft/api-documenter': ^7.13.33
       '@svgr/webpack': ^5.5.0
       clsx: ^1.1.1
       file-loader: ^6.2.0
       gh-pages: ^3.2.3
+      npm-run-all: ^4.1.5
       prism-react-renderer: ^1.2.1
       react: ^17.0.1
       react-dom: ^17.0.1
@@ -68,7 +72,9 @@ importers:
       url-loader: 4.1.1_file-loader@6.2.0
     devDependencies:
       '@commandville/transform': link:../packages/transform
+      '@microsoft/api-documenter': 7.13.33
       gh-pages: 3.2.3
+      npm-run-all: 4.1.5
       shx: 0.3.3
 
   packages/commandville:
@@ -2426,12 +2432,33 @@ packages:
       resolve: 1.17.0
     dev: true
 
+  /@microsoft/api-documenter/7.13.33:
+    resolution: {integrity: sha512-m+Yv/NTP2nvKaey20AszOv9QnQ0O3SxEGWeQF1mci920bQskcz9/5uaVMCtfq7PKPelc8k9NG4gqmzw1dRgKBA==}
+    hasBin: true
+    dependencies:
+      '@microsoft/api-extractor-model': 7.13.4
+      '@microsoft/tsdoc': 0.13.2
+      '@rushstack/node-core-library': 3.39.1
+      '@rushstack/ts-command-line': 4.8.1
+      colors: 1.2.5
+      js-yaml: 3.13.1
+      resolve: 1.17.0
+    dev: true
+
   /@microsoft/api-extractor-model/7.13.3:
     resolution: {integrity: sha512-uXilAhu2GcvyY/0NwVRk3AN7TFYjkPnjHLV2UywTTz9uglS+Af0YjNrCy+aaK8qXtfbFWdBzkH9N2XU8/YBeRQ==}
     dependencies:
       '@microsoft/tsdoc': 0.13.2
       '@microsoft/tsdoc-config': 0.15.2
       '@rushstack/node-core-library': 3.39.0
+    dev: true
+
+  /@microsoft/api-extractor-model/7.13.4:
+    resolution: {integrity: sha512-NYaR3hJinh089/Gkee8fvmEFf9zKkoUvNxgkqUlKBCDXH2+Ou4tNDuL8G6zjhKBPicHkp2VcL8l7q9H6txUkjQ==}
+    dependencies:
+      '@microsoft/tsdoc': 0.13.2
+      '@microsoft/tsdoc-config': 0.15.2
+      '@rushstack/node-core-library': 3.39.1
     dev: true
 
   /@microsoft/api-extractor/7.18.1:
@@ -2501,6 +2528,20 @@ packages:
       z-schema: 3.18.4
     dev: true
 
+  /@rushstack/node-core-library/3.39.1:
+    resolution: {integrity: sha512-HHgMEHZTXQ3NjpQzWd5+fSt2Eod9yFwj6qBPbaeaNtDNkOL8wbLoxVimQNtcH0Qhn4wxF5u2NTDNFsxf2yd1jw==}
+    dependencies:
+      '@types/node': 10.17.13
+      colors: 1.2.5
+      fs-extra: 7.0.1
+      import-lazy: 4.0.0
+      jju: 1.4.0
+      resolve: 1.17.0
+      semver: 7.3.5
+      timsort: 0.3.0
+      z-schema: 3.18.4
+    dev: true
+
   /@rushstack/rig-package/0.2.12:
     resolution: {integrity: sha512-nbePcvF8hQwv0ql9aeQxcaMPK/h1OLAC00W7fWCRWIvD2MchZOE8jumIIr66HGrfG2X1sw++m/ZYI4D+BM5ovQ==}
     dependencies:
@@ -2510,6 +2551,15 @@ packages:
 
   /@rushstack/ts-command-line/4.8.0:
     resolution: {integrity: sha512-nZ8cbzVF1VmFPfSJfy8vEohdiFAH/59Y/Y+B4nsJbn4SkifLJ8LqNZ5+LxCC2UR242EXFumxlsY1d6fPBxck5Q==}
+    dependencies:
+      '@types/argparse': 1.0.38
+      argparse: 1.0.10
+      colors: 1.2.5
+      string-argv: 0.3.1
+    dev: true
+
+  /@rushstack/ts-command-line/4.8.1:
+    resolution: {integrity: sha512-rmxvYdCNRbyRs+DYAPye3g6lkCkWHleqO40K8UPvUAzFqEuj6+YCVssBiOmrUDCoM5gaegSNT0wFDYhz24DWtw==}
     dependencies:
       '@types/argparse': 1.0.38
       argparse: 1.0.10
@@ -4977,7 +5027,7 @@ packages:
       is-negative-zero: 2.0.1
       is-regex: 1.1.3
       is-string: 1.0.6
-      object-inspect: 1.10.3
+      object-inspect: 1.11.0
       object-keys: 1.1.1
       object.assign: 4.1.2
       string.prototype.trimend: 1.0.4
@@ -6614,6 +6664,12 @@ packages:
     resolution: {integrity: sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==}
     dependencies:
       has: 1.0.3
+    dev: true
+
+  /is-core-module/2.5.0:
+    resolution: {integrity: sha512-TXCMSDsEHMEEZ6eCA8rwRDbLu55MRGmrctljsBX/2v1d9/GzqHOxW5c5oPSgrUt2vBFXebu9rGqckXGPWOlYpg==}
+    dependencies:
+      has: 1.0.3
 
   /is-data-descriptor/0.1.4:
     resolution: {integrity: sha1-C17mSDiOLIYCgueT8YVv7D8wG1Y=}
@@ -7834,8 +7890,8 @@ packages:
       kind-of: 3.2.2
     dev: false
 
-  /object-inspect/1.10.3:
-    resolution: {integrity: sha512-e5mCJlSH7poANfC8z8S9s9S2IN5/4Zb3aZ33f5s8YqoazCFzNLloLU8r5VCG+G7WoqLvAAZoVMcy3tp/3X0Plw==}
+  /object-inspect/1.11.0:
+    resolution: {integrity: sha512-jp7ikS6Sd3GxQfZJPyH3cjcbJF6GZPClgdV+EFygjFLQ5FmW/dRUnTd9PQ9k0JhoNDabWFbpF1yCdSWCC6gexg==}
 
   /object-is/1.1.5:
     resolution: {integrity: sha512-3cyDsyHgtmi7I7DfSSI2LDp6SK2lwvtbg0p0R1e0RvTqF5ceGx+K2dfSjm1bKDMVCFEDAQvy+o8c6a7VujOddw==}
@@ -9445,14 +9501,14 @@ packages:
   /resolve/1.19.0:
     resolution: {integrity: sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==}
     dependencies:
-      is-core-module: 2.4.0
+      is-core-module: 2.5.0
       path-parse: 1.0.7
     dev: true
 
   /resolve/1.20.0:
     resolution: {integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==}
     dependencies:
-      is-core-module: 2.4.0
+      is-core-module: 2.5.0
       path-parse: 1.0.7
 
   /responselike/1.0.2:
