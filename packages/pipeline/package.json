@@ -1,0 +1,61 @@
+{
+  "name": "@commandville/pipeline",
+  "version": "0.0.1",
+  "description": "Builds up a new pipeline out of existing streams.",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist/types/index.d.js",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "shx rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:package": "esbuild src/**/*.ts --sourcemap --format=esm --platform=node --target=node14 --outdir=dist",
+    "build": "run-p build:types build:package",
+    "api:build": "api-extractor run",
+    "api:check": "run-s build:types api:build",
+    "api": "run-s build:types \"api:build -- --local\"",
+    "docs:mkdir": "shx mkdir -p ../../docs/docs/packages/pipeline",
+    "docs:copy": "shx cp -r ./docs/* ../../docs/docs/packages/pipeline/",
+    "docs": "run-s api docs:mkdir docs:copy",
+    "watch:types": "pnpm build:types -- --watch",
+    "watch:package": "pnpm build:package -- --watch",
+    "start": "run-p watch:types watch:package",
+    "release:package": "npm-publish --token $NPM_TOKEN --access public ./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dworthen/commandville.git"
+  },
+  "keywords": [
+    "streams",
+    "pipeline"
+  ],
+  "author": "Derek Worthen <worthend.derek@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dworthen/commandville/issues"
+  },
+  "homepage": "https://github.com/dworthen/commandville#readme",
+  "devDependencies": {
+    "@jsdevtools/npm-publish": "^1.4.3",
+    "@microsoft/api-documenter": "^7.13.33",
+    "@microsoft/api-extractor": "^7.18.4",
+    "@types/node": "^16.3.3",
+    "esbuild": "^0.12.15",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.3",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "multipipe": "^4.0.0"
+  }
+}
