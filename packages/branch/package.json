@@ -1,10 +1,10 @@
 {
-  "name": "@commandville/transform",
-  "version": "0.2.0",
-  "description": "utility for creating Node transform streams.",
+  "name": "@commandville/branch",
+  "version": "0.0.0",
+  "description": "utility for creating Node branch streams.",
   "type": "module",
   "exports": "./dist/index.js",
-  "types": "./dist/types/transform.d.ts",
+  "types": "./dist/types/branch.d.ts",
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
@@ -16,8 +16,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "shx rm -rf dist",
-    "out:docs": "typedoc --readme none --out ./docs/build --entryDocument api.md ./src/index.ts",
-    "move:docs": "shx cp ./docs/_category_.json ../../docs/docs/packages/transform/ && shx cp  -r ./docs/build/* ../../docs/docs/packages/transform/",
     "build:docs": "run-s out:docs move:docs",
     "typecheck": "tsc --noEmit",
     "build:types": "tsc --emitDeclarationOnly",
@@ -26,8 +24,8 @@
     "api:build": "api-extractor run",
     "api": "run-s build:types \"api:build -- --local\"",
     "api:check": "run-s build:types api:build",
-    "docs:mkdir": "shx mkdir -p ../../docs/docs/packages/transform",
-    "docs:copy": "shx cp -r ./docs/* ../../docs/docs/packages/transform/",
+    "docs:mkdir": "shx mkdir -p ../../docs/docs/packages/branch",
+    "docs:copy": "shx cp -r ./docs/* ../../docs/docs/packages/branch/",
     "docs": "run-s api docs:mkdir docs:copy",
     "watch:types": "pnpm build:types -- --watch",
     "watch:package": "pnpm build:package -- --watch",
@@ -39,7 +37,7 @@
     "url": "git+https://github.com/dworthen/commandville.git"
   },
   "keywords": [
-    "transform",
+    "branch",
     "streams"
   ],
   "author": "Derek Worthen <worthend.derek@gmail.com>",
@@ -48,6 +46,7 @@
     "url": "https://github.com/dworthen/commandville/issues"
   },
   "homepage": "https://github.com/dworthen/commandville#readme",
+  "dependencies": {},
   "devDependencies": {
     "@jsdevtools/npm-publish": "^1.4.3",
     "@microsoft/api-documenter": "^7.13.30",
@@ -56,8 +55,6 @@
     "esbuild": "^0.12.12",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.3",
-    "typedoc": "^0.21.2",
-    "typedoc-plugin-markdown": "^3.10.2",
     "typescript": "^4.3.4"
   }
 }

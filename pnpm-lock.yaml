@@ -77,6 +77,26 @@ importers:
       npm-run-all: 4.1.5
       shx: 0.3.3
 
+  packages/branch:
+    specifiers:
+      '@jsdevtools/npm-publish': ^1.4.3
+      '@microsoft/api-documenter': ^7.13.30
+      '@microsoft/api-extractor': ^7.18.1
+      '@types/node': ^15.12.5
+      esbuild: ^0.12.12
+      npm-run-all: ^4.1.5
+      shx: ^0.3.3
+      typescript: ^4.3.4
+    devDependencies:
+      '@jsdevtools/npm-publish': 1.4.3
+      '@microsoft/api-documenter': 7.13.33
+      '@microsoft/api-extractor': 7.18.4
+      '@types/node': 15.12.5
+      esbuild: 0.12.15
+      npm-run-all: 4.1.5
+      shx: 0.3.3
+      typescript: 4.3.5
+
   packages/commandville:
     specifiers:
       '@commandville/core': ^0.2.0
