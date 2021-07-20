@@ -1,5 +1,11 @@
 # @commandville/docs
 
+## 0.1.1
+
+### Patch Changes
+
+- fix: docs sidebar
+
 ## 0.1.0
 
 ### Minor Changes
