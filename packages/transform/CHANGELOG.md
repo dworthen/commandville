@@ -1,5 +1,11 @@
 # @commandville/transform
 
+## 0.2.1
+
+### Patch Changes
+
+- 152f6c4: fix: building types
+
 ## 0.2.0
 
 ### Minor Changes
