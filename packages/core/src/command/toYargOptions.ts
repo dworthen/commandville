@@ -36,7 +36,7 @@ export default function toYargsOptions(
         ...(nu(config) && { config }),
         ...(nu(configParser) && { configParser }),
         ...(nu(required) && { demandOption: required }),
-        ...(nu(requiresArgs) && { requiresArgs }),
+        ...(nu(requiresArgs) && { requiresArg: requiresArgs }),
         ...(nu(coerce) && { coerce }),
         ...(nu(d) && { default: d }),
         ...(nu(implies) && { implies }),

@@ -22,7 +22,7 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          docId: 'docs/intro',
+          docId: 'docs/quickstart',
           position: 'right',
           label: 'Docs',
         },
@@ -86,7 +86,7 @@ module.exports = {
     //   copyright: `Copyright © ${new Date().getFullYear()} Commandville`,
     // },
     prism: {
-      theme: lightCodeTheme,
+      theme: darkCodeTheme,
       darkTheme: darkCodeTheme,
     },
   },

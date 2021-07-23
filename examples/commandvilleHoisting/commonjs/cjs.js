@@ -17,7 +17,7 @@ const streamCmd = function streamCmd(c) {
   })
 }
 
-streamCmd.command = 'stream-command'
+// streamCmd.command = 'stream-command'
 streamCmd.options = {
   'name-one': {
     description: 'username',

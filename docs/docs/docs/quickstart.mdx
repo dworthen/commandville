@@ -1,0 +1,324 @@
+---
+sidebar_position: 1
+slug: /
+title: Quickstart
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+# Quickstart
+
+Build declarative, unix-like command line interfaces.
+
+Turn function closures into full CLIs by adding metadata to the closure.
+
+<Tabs
+  groupId="function-style"
+  defaultValue="functions"
+  values={[
+    {label: 'Functions', value: 'functions'},
+    {label: 'Arrow Functions', value: 'arrow-functions'},
+  ]}>
+  <TabItem value="functions">
+
+```javascript title="~/my-project/index.js"
+const myCommand = function greet() {
+  // parse recieves process.argv.slice(2)
+  // but without flagged options.
+  return function parse([greet, name]) {
+    // commandville automatically streams
+    // returned values to process.stdout
+    return `${greet}, ${name}!`
+  }
+}
+
+// Define myCommand as a CLI command
+// by giving it a command name.
+myCommand.command = 'greet'
+
+module.exports = myCommand
+```
+
+  </TabItem>
+  <TabItem value="arrow-functions">
+
+<!-- prettier-ignore-start -->
+```javascript title="~/my-project/index.js"
+const myCommand = () => ([greet, name]) => `${greet}, ${name}!`
+
+myCommand.command = 'greet'
+
+module.exports = myCommand
+```
+<!-- prettier-ignore-end -->
+
+  </TabItem>
+</Tabs>
+
+Commandville automatically hoists all exported function closures that define a `.command` property
+within the current working directory.
+
+```bash title="/my-project"
+$ npm install commandville -g
+
+$ cmv --help
+# outputs:
+cmv [command]
+
+Commands:
+  cmv greet
+
+$ cmv greet hello world
+# hello, world!
+```
+
+Lifted commands automatically support streaming.
+
+```bash title="/my-project"
+echo "world" | cmv greet hello
+# hello, world!
+```
+
+:::note
+
+In the above scenario, the entire process.stdin is gathered in memory
+before being passed to the `parse` function. To fully support streaming,
+the function closure needs to return a
+[NodeJS Transform stream](https://nodejs.org/dist/latest-v14.x/docs/api/stream.html#stream_duplex_and_transform_streams).
+More on that later.
+
+:::
+
+## CLI Options
+
+Options are defined on the `.options` property of the function closure.
+The options are gathered and passed to the function closure as a plain object.
+
+<Tabs
+  groupId="function-style"
+  defaultValue="functions"
+  values={[
+    {label: 'Functions', value: 'functions'},
+    {label: 'Arrow Functions', value: 'arrow-functions'},
+  ]}>
+  <TabItem value="functions">
+
+```javascript title="~/my-project/index.js"
+const myCommand = function greet(flags) {
+  return function parse([greet, name]) {
+    console.log(flags)
+    return `${greet}, ${name}!`
+  }
+}
+
+myCommand.command = 'greet'
+
+myCommand.options = {
+  optionOne: {
+    description: 'Option One.',
+    type: 'string',
+  },
+  'option-two': {
+    description: 'more options',
+    type: 'number',
+  },
+}
+
+module.exports = myCommand
+```
+
+  </TabItem>
+  <TabItem value="arrow-functions">
+
+<!-- prettier-ignore-start -->
+
+```javascript title="~/my-project/index.js"
+const myCommand = (flags) => ([greet, name]) => {
+  console.log(flags)
+  return `${greet}, ${name}!`
+}
+
+myCommand.command = 'greet'
+
+myCommand.options = {
+  optionOne: {
+    description: 'Option One.',
+    type: 'string',
+  },
+  'option-two': {
+    description: 'more options',
+    type: 'number',
+  },
+}
+
+module.exports = myCommand
+```
+
+<!-- prettier-ignore-end -->
+
+  </TabItem>
+</Tabs>
+
+Options may be defined using camelCase formatting or hyphenated names.
+The `--help` menu preserves the defined style.
+
+```bash title="~/my-porject"
+$ cmv greet --help
+#outputs
+cmv greet
+
+Options:
+  --help        Show help                                              [boolean]
+  --version     Show version number                                    [boolean]
+  --optionOne   Option One                                              [string]
+  --option-two  more options                                            [number]
+```
+
+Though the `--help` menu preserves the defined style, the CLI accepts both formatting styles and
+the `flags` object will contain both formatting styles for every flag. In the following example,
+the greet CLI is called with `optionOne` as a hyphenated flag and `option-two` as a camelCase flag,
+the opposite of how they are defind in code.
+Both options are actually availble within the flags object using either style.
+
+```bash title="~/my-project"
+$ cmv greet hello world --option-one cool --optionTwo 5
+# outputs
+{
+  "option-one": "cool",
+  "optionOne": "cool",
+  "optionTwo": 5,
+  "option-two": 5
+}
+hello, world!
+```
+
+## Async CLI
+
+Simply return an async function from the function closure.
+
+```javascript title="~/my-project/index.js"
+const myCommand = function greet(flags) {
+  return async function parse([greet, name]) {
+    // Do some async stuff...
+    console.log(flags)
+    return `${greet}, ${name}!`
+  }
+}
+
+...
+```
+
+## Stream CLI
+
+To fully support argument streaming, return a
+[NodeJS Transform stream](https://nodejs.org/dist/latest-v14.x/docs/api/stream.html#stream_duplex_and_transform_streams)
+
+```javascript title="~/my-project/streamer.js"
+const { Transform } = require('stream')
+
+const cmd = (options) => {
+  return new Transform({
+    objectMode: true,
+    transform(chunk, encoding, cb) {
+      // Check if chunk is a buffer
+      const isBuffer = Buffer.isBuffer(chunk)
+
+      // convert chunk to string.
+      const value = isBuffer ? chunk.toString('utf-8') : chunk
+
+      console.log(`${value} is a buffer: ${isBuffer}`)
+
+      // push the value to the next stream.
+      this.push(value)
+      cb()
+    },
+  })
+}
+
+cmd.command = 'streamer'
+```
+
+Instead of recieving all arguments as an array of string, the transform stream will
+run for each incoming stream chunk.
+
+```bash title="~/my-project"
+$ cmv streamer hello world
+# outputs
+hello is a buffer: true
+world is a buffer: true
+```
+
+Or
+
+```bash title="~/my-project"
+$ cat "some-large-file.ext" | cmv streamer
+# outputs
+chunk1 is a buffer: true
+chunk2 is a buffer: true
+chunk3 is a buffer: true
+...
+```
+
+### Transform helper
+
+`@commandville/transform` is a simple utlility for creating Transform streams using functions.
+
+```javascript title="~/my-project/streamer.js"
+const { transform } = require('@commandville/transform')
+
+const cmd = (options) => {
+  return transform((chunk) => {
+    // Check if chunk is a buffer
+    const isBuffer = Buffer.isBuffer(chunk)
+
+    // convert chunk to string.
+    const value = isBuffer ? chunk.toString('utf-8') : chunk
+
+    console.log(`${value} is a buffer: ${isBuffer}`)
+
+    // send value to output stream
+    return value
+  })
+}
+
+cmd.command = 'streamer'
+```
+
+Example of using `@commandville/transform` to
+gather up stream chunks and output a single string at the end.
+
+```javascript title="~/my-project/streamer.js"
+const { transform } = require('@commandville/transform')
+
+const cmd = (options) => {
+  const cliChunks = []
+  return transform(
+    (chunk) => {
+      // Check if chunk is a buffer
+      const isBuffer = Buffer.isBuffer(chunk)
+
+      // convert chunk to string.
+      const value = isBuffer ? chunk.toString('utf-8') : chunk
+
+      // don't send individual chunks to output stream.
+      // instead, build up chunks to output at the end.
+      cliChunks.push(value)
+    },
+    () => {
+      // This function runs at the end of the input stream
+      // return all the input chunks as one string
+      return cliChunks.join(' ')
+    },
+  )
+}
+
+cmd.command = 'streamer'
+```
+
+```bash title="~/my-project"
+$ cmv streamer hello world
+# hello world
+$ echo "lastName" | cmv streamer greetings firstName
+# greetings firstName lastName
+```

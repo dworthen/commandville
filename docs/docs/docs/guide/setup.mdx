@@ -1,0 +1,104 @@
+---
+title: 'Project Setup'
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+# Project Structure
+
+To get started, create the following directory structure.
+
+```
+~/my-project
+|-- index.js
+|-- package.json
+```
+
+## Install
+
+For this tutorial, we will install `commandville` as a local script though
+it can be installed as a global script.
+
+<Tabs
+  groupId="pkg-manager"
+  defaultValue="pnpm"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'pnpm', value: 'pnpm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
+
+```bash title="~/my-project"
+$ npm install commandville
+```
+
+  </TabItem>
+  <TabItem value="pnpm">
+
+```bash title="~/my-project"
+$ pnpm add commandville
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash title="~/my-project"
+$ yarn add commandville
+```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+
+Haven't tried [pnpm](https://pnpm.io/)?
+This [article](https://www.takeshape.io/articles/why-we-switched-from-yarn-to-pnpm/)
+provides a good overview of pnpm and reasons as to why some teams may prefer it over other
+package managers.
+
+:::
+
+### package.json
+
+```json title="package.json"
+{
+  ...
+  scripts: {
+    "cmv": "cmv"
+  }
+}
+```
+
+<Tabs
+  groupId="pkg-manager"
+  defaultValue="pnpm"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'pnpm', value: 'pnpm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
+
+```bash title="npm"
+npm run cmv -- <COMMAND>
+```
+
+  </TabItem>
+  <TabItem value="pnpm">
+
+```bash title="pnpm"
+pnpm cmv <COMMAND>
+```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash title="yarn"
+yarn cmv <COMMAND>
+```
+
+  </TabItem>
+</Tabs>
