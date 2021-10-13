@@ -9,24 +9,23 @@ import TabItem from '@theme/TabItem'
 
 # Quickstart
 
-Build declarative, unix-like command line interfaces.
-
-Turn function closures into full CLIs by adding metadata to the closure.
+Build declarative CLIs that support streaming and
+piping out of the box using simple function closures.
 
 <Tabs
-  groupId="function-style"
-  defaultValue="functions"
+  groupId="module-style"
+  defaultValue="ESM"
   values={[
-    {label: 'Functions', value: 'functions'},
-    {label: 'Arrow Functions', value: 'arrow-functions'},
+    {label: 'CommonJS', value: 'CommonJS'},
+    {label: 'ESM', value: 'ESM'},
   ]}>
-  <TabItem value="functions">
+  <TabItem value="CommonJS">
 
 ```javascript title="~/my-project/index.js"
-const myCommand = function greet() {
-  // parse recieves process.argv.slice(2)
+function myCommand() {
+  // cli recieves process.argv.slice(2)
   // but without flagged options.
-  return function parse([greet, name]) {
+  return function cli([greet, name]) {
     // commandville automatically streams
     // returned values to process.stdout
     return `${greet}, ${name}!`
@@ -41,15 +40,23 @@ module.exports = myCommand
 ```
 
   </TabItem>
-  <TabItem value="arrow-functions">
+  <TabItem value="ESM">
 
 <!-- prettier-ignore-start -->
-```javascript title="~/my-project/index.js"
-const myCommand = () => ([greet, name]) => `${greet}, ${name}!`
+```javascript title="~/my-project/index.mjs"
+export function myCommand() {
+  // cli recieves process.argv.slice(2)
+  // but without flagged options.
+  return function cli([greet, name]) {
+    // commandville automatically streams
+    // returned values to process.stdout
+    return `${greet}, ${name}!`
+  }
+}
 
+// Define myCommand as a CLI command
+// by giving it a command name.
 myCommand.command = 'greet'
-
-module.exports = myCommand
 ```
 <!-- prettier-ignore-end -->
 
@@ -59,7 +66,7 @@ module.exports = myCommand
 Commandville automatically hoists all exported function closures that define a `.command` property
 within the current working directory.
 
-```bash title="/my-project"
+```bash title="~/my-project"
 $ npm install commandville -g
 
 $ cmv --help
@@ -75,18 +82,27 @@ $ cmv greet hello world
 
 Lifted commands automatically support streaming.
 
-```bash title="/my-project"
+```bash title="~/my-project"
 echo "world" | cmv greet hello
 # hello, world!
 ```
 
-:::note
+:::info
 
 In the above scenario, the entire process.stdin is gathered in memory
-before being passed to the `parse` function. To fully support streaming,
+before being passed to the `cli` function. To fully support streaming,
 the function closure needs to return a
 [NodeJS Transform stream](https://nodejs.org/dist/latest-v14.x/docs/api/stream.html#stream_duplex_and_transform_streams).
 More on that later.
+
+:::
+
+:::caution
+
+To support [ES modules](https://nodejs.org/dist/latest-v14.x/docs/api/esm.html)
+use the `.mjs` file extension or set the `type` field in `package.json` to `module`.
+View [Determining module system](https://nodejs.org/dist/latest-v14.x/docs/api/packages.html#packages_determining_module_system)
+for more information.
 
 :::
 
@@ -96,17 +112,17 @@ Options are defined on the `.options` property of the function closure.
 The options are gathered and passed to the function closure as a plain object.
 
 <Tabs
-  groupId="function-style"
-  defaultValue="functions"
+  groupId="module-style"
+  defaultValue="ESM"
   values={[
-    {label: 'Functions', value: 'functions'},
-    {label: 'Arrow Functions', value: 'arrow-functions'},
+    {label: 'CommonJS', value: 'CommonJS'},
+    {label: 'ESM', value: 'ESM'},
   ]}>
-  <TabItem value="functions">
+  <TabItem value="CommonJS">
 
 ```javascript title="~/my-project/index.js"
-const myCommand = function greet(flags) {
-  return function parse([greet, name]) {
+function myCommand(flags) {
+  return function cli([greet, name]) {
     console.log(flags)
     return `${greet}, ${name}!`
   }
@@ -129,14 +145,16 @@ module.exports = myCommand
 ```
 
   </TabItem>
-  <TabItem value="arrow-functions">
+  <TabItem value="ESM">
 
 <!-- prettier-ignore-start -->
 
-```javascript title="~/my-project/index.js"
-const myCommand = (flags) => ([greet, name]) => {
-  console.log(flags)
-  return `${greet}, ${name}!`
+```javascript title="~/my-project/index.mjs"
+export function myCommand(flags) {
+  return function cli([greet, name]) {
+    console.log(flags)
+    return `${greet}, ${name}!`
+  }
 }
 
 myCommand.command = 'greet'
@@ -151,8 +169,6 @@ myCommand.options = {
     type: 'number',
   },
 }
-
-module.exports = myCommand
 ```
 
 <!-- prettier-ignore-end -->
@@ -198,8 +214,8 @@ hello, world!
 Simply return an async function from the function closure.
 
 ```javascript title="~/my-project/index.js"
-const myCommand = function greet(flags) {
-  return async function parse([greet, name]) {
+export function myCommand(flags) {
+  return async function cli([greet, name]) {
     // Do some async stuff...
     console.log(flags)
     return `${greet}, ${name}!`

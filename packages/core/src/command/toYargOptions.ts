@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs'
 import type { Options } from 'yargs'
 
 import { nu } from '../utils/index.js'
@@ -27,14 +28,22 @@ export default function toYargsOptions(
         deprecated,
       } = value
 
+      const defaultConfigParser = (
+        filePath: string,
+      ): Record<string, unknown> => {
+        return JSON.parse(readFileSync(filePath, 'utf-8'))
+      }
+
       acc[key] = {
         description,
         type,
         ...(nu(aliases) && { alias: aliases }),
         ...(nu(array) && { array }),
         ...(nu(choices) && { choices }),
-        ...(nu(config) && { config }),
-        ...(nu(configParser) && { configParser }),
+        ...(nu(config) && {
+          config,
+          configParser: configParser ?? defaultConfigParser,
+        }),
         ...(nu(required) && { demandOption: required }),
         ...(nu(requiresArgs) && { requiresArg: requiresArgs }),
         ...(nu(coerce) && { coerce }),

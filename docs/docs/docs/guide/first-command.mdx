@@ -21,7 +21,7 @@ property informs `commandville` that the corresponding closure is
 a CLI command. We call this closure the **command closure**.
 
 ```javascript title="~/my-project/index.js"
-const myCommand = function greet() {
+const greetCommand = function greet() {
   // parse recieves process.argv.slice(2)
   // but without flagged options.
   return function parse([greet, name]) {
@@ -31,11 +31,11 @@ const myCommand = function greet() {
   }
 }
 
-// Define myCommand as a command closure
+// Define greetCommand as a command closure
 // by giving it a command name.
-myCommand.command = 'greet'
+greetCommand.command = 'greet'
 
-module.exports = myCommand
+module.exports = greetCommand
 ```
 
 Run `$ cmv --help` to view the available command or `$ cmv greet --help`

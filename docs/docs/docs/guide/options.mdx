@@ -1,184 +1,40 @@
 ---
-title: CLI Flags
-sidebare_position: 3
+title: Command Flags
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 
-# CLI Options
+# Command Flags
 
-Flagged options are passed to the command closure as
-a plain object.
+## Boolean flag
+
+Let's add a flag to indicate that this is an excited greeting.
 
 ```javascript title="~/my-project/index.js"
 // highlight-next-line
-const myCommand = function greet(flags) {
-  return function parse([greet, name]) {
-
+const greetCommand = function greet({ excited }) {
+  return function parse([greeting, name]) {
     // highlight-next-line
-    console.log(flags)
-    return `${greet}, ${name}!`
+    return `${greeting}, ${name}${excited ? '!' : '.'}`
   }
 }
 
-...
-```
-
-Options may be passed using camelCase or hyphenated names.
-Nested options are supported using dot notation.
-
-<Tabs
-  groupId="pkg-manager"
-  defaultValue="pnpm"
-  values={[
-    {label: 'npm', value: 'npm'},
-    {label: 'pnpm', value: 'pnpm'},
-    {label: 'yarn', value: 'yarn'},
-  ]}>
-  <TabItem value="npm">
-
-```bash title="~/my-project"
-$ npm run cmv -- greet hello world --option-one first \
---optionTwo second --nested.option third
-# outputs
-{
-  'option-one': 'first',
-  optionOne: 'first',
-  optionTwo: NaN,
-  'option-two': NaN,
-  nested: { option: 'third' },
-}
-...
-```
-
-  </TabItem>
-  <TabItem value="pnpm">
-
-```bash title="~/my-project"
-$ pnpm cmv greet hello world --option-one first \
---optionTwo second --nested.option third
-# outputs
-{
-  'option-one': 'first',
-  optionOne: 'first',
-  optionTwo: NaN,
-  'option-two': NaN,
-  nested: { option: 'third' },
-}
-...
-```
-
-  </TabItem>
-  <TabItem value="yarn">
-
-```bash title="~/my-project"
-$ yarn cmv greet hello world --option-one first \
---optionTwo second --nested.option third
-# outputs
-{
-  'option-one': 'first',
-  optionOne: 'first',
-  optionTwo: NaN,
-  'option-two': NaN,
-  nested: { option: 'third' },
-}
-...
-```
-
-  </TabItem>
-</Tabs>
-
-Notice that flags can be set using camelCase or hyphenated names
-but are actually available off the flags object using either notation.
-
-There is one problem with the current CLI program.
-Commandville knows nothing about the available options.
-Running `$ cmv greet --help` produces a message of little help.
-
-<Tabs
-  groupId="pkg-manager"
-  defaultValue="pnpm"
-  values={[
-    {label: 'npm', value: 'npm'},
-    {label: 'pnpm', value: 'pnpm'},
-    {label: 'yarn', value: 'yarn'},
-  ]}>
-  <TabItem value="npm">
-
-```bash title="~/my-project"
-$ npm run cmv -- greet --help
-# outputs
-cmv greeting
-
-Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-```
-
-  </TabItem>
-  <TabItem value="pnpm">
-
-```bash title="~/my-project"
-$ pnpm cmv greet --help
-# outputs
-cmv greeting
-
-Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-```
-
-  </TabItem>
-  <TabItem value="yarn">
-
-```bash title="~/my-project"
-$ yarn cmv greet --help
-# outputs
-cmv greeting
-
-Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-```
-
-  </TabItem>
-</Tabs>
-
-Let's fix that by adding an `.options` property to the command closure
-to define the available/expected CLI options.
-
-```javascript title="~/my-project/index.js"
-const myCommand = function greet(flags) {
-  return function parse([greet, name]) {
-    console.log(flags)
-    return `${greet}, ${name}!`
-  }
-}
-
-myCommand.command = 'greet'
-
+greetCommand.command = 'greeting'
 // highlight-start
-myCommand.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-  },
-  'option-two': {
-    description: 'more options',
-    type: 'number',
-  },
-  'nested.option': {
-    description: 'nested option',
-    type: 'string',
+greetCommand.options = {
+  excited: {
+    type: 'boolean',
+    description: 'Is the message exciting?',
   },
 }
 // highlight-end
 
-module.exports = myCommand
+module.exports = greetCommand
 ```
 
-Now running `$ cmv greet --help` produces a more insightful message.
+Now we can greet someone with some enthusiasm.
 
 <Tabs
   groupId="pkg-manager"
@@ -191,246 +47,310 @@ Now running `$ cmv greet --help` produces a more insightful message.
   <TabItem value="npm">
 
 ```bash title="~/my-project"
-$ npm run cmv -- greet --help
-# outputs
-cmv greeting
-
-Options:
-  --help           Show help                                           [boolean]
-  --version        Show version number                                 [boolean]
-  --optionOne      Option One                                           [string]
-  --option-two     more options                                         [number]
-  --nested.option  nested option                                        [string]
+$ npm run cmv -- greet hello world --excited
+hello, world!
 ```
 
   </TabItem>
   <TabItem value="pnpm">
 
 ```bash title="~/my-project"
-$ pnpm cmv greet --help
-# outputs
-cmv greeting
-
-Options:
-  --help           Show help                                           [boolean]
-  --version        Show version number                                 [boolean]
-  --optionOne      Option One                                           [string]
-  --option-two     more options                                         [number]
-  --nested.option  nested option                                        [string]
+$ pnpm cmv greet hello world --excited
+hello, world!
 ```
 
   </TabItem>
   <TabItem value="yarn">
 
 ```bash title="~/my-project"
-$ yarn cmv greet --help
-# outputs
-cmv greeting
-
-Options:
-  --help           Show help                                           [boolean]
-  --version        Show version number                                 [boolean]
-  --optionOne      Option One                                           [string]
-  --option-two     more options                                         [number]
-  --nested.option  nested option                                        [string]
+$ yarn cmv greet hello world --excited
+hello, world!
 ```
 
   </TabItem>
 </Tabs>
 
-The `--help` menu preserves the
-formatting of how the flag is defined
-but again, either camelCase or hyphenated flags may be used
-when calling the CLI command.
+:::info
 
-## Default Flags
+boolean flags can be negated using `--no-` . In this case, `--no-excited`.
 
-```javascript title="~/my-project"
-...
+:::
 
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    default: 'Yes'
-  },
-  ...
-}
-```
+:::caution
 
-## Array Flags
+`type` and `description` are required properties when defining options.
 
-```javascript title="~/my-project"
-...
+:::
 
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
+## Default flags
+
+Flags also support default values.
+Let's support using a custom punctuation mark for exciting messages
+and default to using '!'.
+
+```javascript title="~/my-project/index.js"
+// highlight-next-line
+const greetCommand = function greet({ excited, mark = '!' }) {
+  return function parse([greeting, name]) {
     // highlight-next-line
-    array: true
-  },
-  ...
+    return `${greeting}, ${name}${excited ? mark : '.'}`
+  }
 }
-```
 
-### Default Array Flags
-
-```javascript title="~/my-project"
-...
-
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
+greetCommand.command = 'greeting'
+greetCommand.options = {
+  excited: {
+    type: 'boolean',
+    description: 'Is the message exciting?',
+  },
+  // highlight-start
+  mark: {
     type: 'string',
-    array: true,
-    // highlight-next-line
-    default: ['one', 'two']
+    description: 'Punctuation mark to use for exciting messages.',
+    default: '!',
   },
-  ...
+  // highlight-end
 }
+
+module.exports = greetCommand
 ```
 
-## Required Flags
+:::info
 
-```javascript title="~/my-project"
-...
+It may seem redundant to specify a default value in the command options object
+and to use es6 default notation but they solve different problems.
+Es6 default notation allows us to use the the function programmatically,
+to compose larger CLIs from smaller ones.
+The default value specified in the command options object helps
+`cmv` generate a help message and to lift the function as a CLI.
+Composing CLIs out of smaller, reusable functions will be visited in
+another article.
 
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
+:::
+
+## Counting Flags
+
+Istead of specifying `excited` as a boolean, let's update the flag
+to allow to be specified multiple times. That way we can count how many
+times the flag was used and make the message
+
+```javascript title="~/my-project/index.js"
+const greetCommand = function greet({ excited, mark = '!' }) {
+  return function parse([greeting, name]) {
+    // highlight-next-line
+    return `${greeting}, ${name}${excited ? ''.padEnd(excited, mark) : '.'}`
+  }
+}
+
+greetCommand.command = 'greeting'
+greetCommand.options = {
+  excited: {
+    // highlight-next-line
+    type: 'count',
+    description: 'Is the message exciting?',
+  },
+  mark: {
     type: 'string',
-    // highlight-next-line
-    required: true,
+    description: 'Punctuation mark to use for exciting messages.',
+    default: '!',
   },
-  ...
 }
+
+module.exports = greetCommand
 ```
 
-## Require Arguments
+<Tabs
+  groupId="pkg-manager"
+  defaultValue="pnpm"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'pnpm', value: 'pnpm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
 
-Running `$ cmv greet --option-one` satisfies the `required`
-constraint but perhaps the option requires arguments. That is
-what `reuiresArgs` speficies.
-
-```javascript title="~/my-project"
-...
-
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    required: true,
-    // highlight-next-line
-    requireArgs: true
-  },
-  ...
-}
+```bash title="~/my-project"
+$ npm run cmv -- greet hello world \
+--excited --excited --excited
+hello, world!!!
 ```
 
-Now the required constraint is only satisfied when arguments are
-provided for the `--option-one` flag. Note that you may use
-`requiresArgs` without the `required` constraint, making arguments
-necessary when using the option but the option itself is optional.
+  </TabItem>
+  <TabItem value="pnpm">
 
-### Specify Number of Expected Arguments
-
-When using `requiresArgs` it is also possible to specify
-the number of expected args.
-
-```javascript title="~/my-project"
-...
-
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    required: true,
-    requireArgs: true,
-    // highlight-next-line
-    nargs: 2
-  },
-  ...
-}
+```bash title="~/my-project"
+$ pnpm cmv greet hello world \
+--excited --excited --excited
+hello, world!!!
 ```
+
+  </TabItem>
+  <TabItem value="yarn">
+
+```bash title="~/my-project"
+$ yarn cmv greet hello world \
+--excited --excited --excited
+hello, world!!!
+```
+
+  </TabItem>
+</Tabs>
 
 ## Flag Aliases
 
-```javascript title="~/my-project"
-...
+Needing to repeatedly pass a full flag is tedious.
+Let's assign a flag alias to make things easier.
 
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    required: true,
+```javascript title="~/my-project/index.js"
+const greetCommand = function greet({ excited, mark = '!' }) {
+  return function parse([greeting, name]) {
+    return `${greeting}, ${name}${excited ? ''.padEnd(excited, mark) : '.'}`
+  }
+}
+
+greetCommand.command = 'greeting'
+greetCommand.options = {
+  excited: {
+    type: 'count',
+    description: 'Is the message exciting?',
     // highlight-next-line
-    aliases: ['o', 'p']
+    aliases: ['e'],
   },
-  ...
+  mark: {
+    type: 'string',
+    description: 'Punctuation mark to use for exciting messages.',
+    default: '!',
+  },
 }
+
+module.exports = greetCommand
 ```
 
-## Choice Flags
+<Tabs
+  groupId="pkg-manager"
+  defaultValue="pnpm"
+  values={[
+    {label: 'npm', value: 'npm'},
+    {label: 'pnpm', value: 'pnpm'},
+    {label: 'yarn', value: 'yarn'},
+  ]}>
+  <TabItem value="npm">
 
-```javascript title="~/my-project"
-...
-
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    required: true,
-    alias: ['o', 'p'],
-    choices: ['Yes', 'No']
-  },
-  ...
-}
+```bash title="~/my-project"
+$ npm run cmv -- greet hello world -eee
+hello, world!!!
 ```
 
-## Coerce Flags
+  </TabItem>
+  <TabItem value="pnpm">
 
-A synchronous function for coercing input arguments.
-Here is an example of paring an argument as a JSON file.
+```bash title="~/my-project"
+$ pnpm cmv greet hello world -eee
+hello, world!!!
+```
 
-```javascript title="~/my-project"
-...
+  </TabItem>
+  <TabItem value="yarn">
 
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    requiresArgs: true,
-    nargs: 1,
+```bash title="~/my-project"
+$ yarn cmv greet hello world -eee
+hello, world!!!
+```
+
+  </TabItem>
+</Tabs>
+
+## Coercing Flags
+
+Let's support repeating the output message by adding a `repeat` flag.
+This flag should be a whole number as we don't want to repeat
+the message a fractional number of times.
+
+```javascript title="~/my-project/index.js"
+// highlight-next-line
+const greetCommand = function greet({ excited, mark = '!', repeat = 1 }) {
+  return function parse([greeting, name]) {
     // highlight-start
-    coerce: (filePath) => {
-      return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-    }
+    const message = `${greeting}, ${name}${
+      excited ? ''.padEnd(excited, mark) : '.'
+    }`
+    return ''.padEnd(message.length * repeat, message)
     // highlight-end
-  },
-  ...
+  }
 }
+
+greetCommand.command = 'greeting'
+greetCommand.options = {
+  excited: {
+    type: 'count',
+    description: 'Is the message exciting?',
+    aliases: ['e'],
+  },
+  mark: {
+    type: 'string',
+    description: 'Punctuation mark to use for exciting messages.',
+    default: '!',
+  },
+  // highlight-start
+  repeat: {
+    type: 'number',
+    description: 'Repeat the message x number of times.',
+    default: 1,
+    // coerce number to be an integer
+    coerce: (val) => val | 0,
+  },
+  // highlight-end
+}
+
+module.exports = greetCommand
 ```
 
-## Flag Validation
+## Validation
 
-`coerce`
+By throwing an error, `coerce` may also be used to validate flags.
+The above example coerces a fractional number to an integer but
+what if the user inputs text instead of a number or a negative number.
+Let's check that the value can be coerced to an integer and is positive.
 
-```javascript title="~/my-project"
-...
+```javascript title="~/my-project/index.js"
+const greetCommand = function greet({ excited, mark = '!', repeat = 1 }) {
+  return function parse([greeting, name]) {
+    const message = `${greeting}, ${name}${
+      excited ? ''.padEnd(excited, mark) : '.'
+    }`
+    return ''.padEnd(message.length * repeat, message)
+  }
+}
 
-cmd.options = {
-  optionOne: {
-    ...
+greetCommand.command = 'greeting'
+greetCommand.options = {
+  excited: {
+    type: 'count',
+    description: 'Is the message exciting?',
+    aliases: ['e'],
+  },
+  mark: {
+    type: 'string',
+    description: 'Punctuation mark to use for exciting messages.',
+    default: '!',
+  },
+  repeat: {
+    type: 'number',
+    description: 'Repeat the message x number of times.',
+    default: 1,
     // highlight-start
-    coerce: (filePath) => {
-      if (!fs.existsSync(filePath)) {
-        throw new Error(`${filePath} does not exist.`)
+    coerce: (val) => {
+      const parsed = parseInt(val)
+      if (isNaN(parsed) || parsed < 0) {
+        throw new Error(`--repeat must be a positive integer.`)
       }
-      return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-    }
+      return parsed
+    },
     // highlight-end
   },
-  ...
 }
+
+module.exports = greetCommand
 ```
+
+View [command flags](../references/flags) for a full list of flag types.

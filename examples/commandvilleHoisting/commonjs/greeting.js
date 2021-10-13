@@ -1,47 +1,49 @@
 const { Transform } = require('stream')
 const fs = require('fs')
 
-const cmd = (options) => {
-  console.log(options)
-  return new Transform({
-    objectMode: true,
-    transform(chunk, encoding, cb) {
-      // Check if chunk is a buffer
-      const isBuffer = Buffer.isBuffer(chunk)
-
-      // convert chunk to string.
-      const value = isBuffer ? chunk.toString('utf-8') : chunk
-
-      console.log(`${value} is a buffer: ${isBuffer}`)
-
-      // push the value to the next stream.
-      this.push(value)
-      cb()
-    },
-  })
+const greetCommand = function greet({ excited, mark = '!', repeat = 1 }) {
+  return function parse([greeting, name]) {
+    const message = `${greeting}, ${name}${
+      excited ? ''.padEnd(excited, mark) : '.'
+    }`
+    return ''.padEnd(message.length * repeat, message)
+  }
 }
 
-cmd.command = 'greeting'
+greetCommand.command = 'greeting'
 
-cmd.options = {
-  optionOne: {
-    description: 'Option One',
-    type: 'string',
-    coerce: (filePath) => {
-      if (!fs.existsSync(filePath)) {
-        throw new Error(`${filePath} does not exist.`)
-      }
-      return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-    },
+greetCommand.options = {
+  excited: {
+    type: 'count',
+    description: 'Is it an exciting message.',
+    aliases: ['e'],
   },
-  'option-two': {
-    description: 'more options',
+  mark: {
+    type: 'string',
+    description: 'Punctuation mark to use for exciting messages.',
+    default: '!',
+  },
+  repeat: {
     type: 'number',
+    description: 'Repeat the message x number of times.',
+    default: 1,
+    coerce: (val) => {
+      if (val < 0) {
+        throw new Error('Cannot repeat a message a negative number of times')
+      }
+      return val | 0
+    },
   },
-  'nested.option': {
-    description: 'nested option',
+  'config-file': {
     type: 'string',
+    description: 'Specify a config file',
+    config: true,
+    // configParser: (filePath) => {
+    //   // return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+    //   console.log(filePath)
+    //   return filePath
+    // },
   },
 }
 
-module.exports = cmd
+module.exports = greetCommand
