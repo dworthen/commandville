@@ -22,14 +22,14 @@ export function program(programDescription: ProgramDescription): ProgramParser {
     config,
     loadEnv = false,
     envPrefix = 'CMV',
-    envFile = 'cmv.env',
+    envFile = '.env',
   } = programDescription
 
   let prog = yargs([]).scriptName(program)
 
   if (version != null) _setVersion()
   if (loadEnv) _loadEnv()
-  if (config != null) _loadConfig()
+  if (config != null) _setConfig()
   prog = prog.showHelpOnFail(false)
 
   commands.forEach(_loadCommand)
@@ -48,7 +48,7 @@ export function program(programDescription: ProgramDescription): ProgramParser {
     prog = prog.env(envPrefix ?? '')
   }
 
-  function _loadConfig(): void {
+  function _setConfig(): void {
     prog = prog.config(config as Record<string, unknown>)
   }
 

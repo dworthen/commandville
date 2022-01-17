@@ -1,9 +1,0 @@
-{
-  "commands": ["./*.js"],
-  "config": {
-    "flagOne": "flag Two"
-  },
-  "loadEnv": true,
-  "envPrefix": "CLI",
-  "envFile": "cli.env"
-}

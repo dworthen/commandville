@@ -7,7 +7,7 @@ module.exports = {
   tagline: 'CLIs are cool',
   url: 'https://dworthen.github.io',
   baseUrl: '/commandville/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'dworthen', // Usually your GitHub org/user name.
@@ -22,7 +22,7 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          docId: 'docs/intro',
+          docId: 'docs/quickstart',
           position: 'right',
           label: 'Docs',
         },
@@ -86,7 +86,7 @@ module.exports = {
     //   copyright: `Copyright © ${new Date().getFullYear()} Commandville`,
     // },
     prism: {
-      theme: lightCodeTheme,
+      theme: darkCodeTheme,
       darkTheme: darkCodeTheme,
     },
   },

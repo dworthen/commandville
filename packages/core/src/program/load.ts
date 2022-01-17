@@ -104,7 +104,7 @@ async function _load({
   function _loadCommands(module: Module): void {
     Object.entries(module).forEach(([key, value]) => {
       if (isCommand(value)) {
-        value.command = `${prefix !== '' ? prefix + ':' : ''}${value.command}`
+        value.command = `${prefix !== '' ? prefix : ''}${value.command}`
         commands.set(value.command, value)
       }
     })
@@ -120,7 +120,7 @@ async function isFile(path: string): Promise<boolean> {
 }
 
 function isJsOrTs(path: string): boolean {
-  return /\.(?:m?j|t)s$/.test(path)
+  return /\.(?:m?j|t)s$/i.test(path)
 }
 
 function isCommand(command: unknown): command is Command {

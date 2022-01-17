@@ -10,7 +10,7 @@ export function nu(arg: any): boolean {
 
 export function isStdinPiped(): boolean {
   try {
-    const stats = fstatSync(0)
+    const stats = fstatSync(process.stdin.fd)
     return !stats.isFIFO()
   } catch (ex) {
     return false

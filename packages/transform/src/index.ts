@@ -68,7 +68,7 @@ export function transform<T = unknown, R1 = unknown, R2 = unknown>(
         if (isPromise(resultOrPromise)) {
           const result = await resultOrPromise
           this.push(result)
-        } else {
+        } else if (resultOrPromise !== undefined) {
           this.push(resultOrPromise)
         }
         cb()
