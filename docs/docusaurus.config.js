@@ -7,7 +7,7 @@ module.exports = {
   tagline: 'CLIs are cool',
   url: 'https://dworthen.github.io',
   baseUrl: '/commandville/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'dworthen', // Usually your GitHub org/user name.

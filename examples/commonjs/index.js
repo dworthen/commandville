@@ -1,18 +1,32 @@
 const { Transform } = require('stream')
 const fs = require('fs')
 
-const greetCommand = function greet({ excited, mark = '!', repeat = 1 }) {
-  return function parse([greeting, name]) {
-    const message = `${greeting}, ${name}${
-      excited ? ''.padEnd(excited, mark) : '.'
-    }`
-    return ''.padEnd(message.length * repeat, message)
-  }
+function greet({ excited, mark = '!', repeat = 1, configFile }) {
+  let values = []
+  return new Transform({
+    objectMode: true,
+    transform(chunk, enc, cb) {
+      // Check if chunk is a buffer
+      const isBuffer = Buffer.isBuffer(chunk)
+
+      // convert chunk to string.
+      const value = isBuffer ? chunk.toString('utf-8') : chunk
+      values.push(value)
+      cb()
+    },
+    flush(cb) {
+      const message = `${values.join(' ').replace(/\r?\n$/, '')}${
+        excited ? ''.padEnd(excited, mark) : '.'
+      }`
+      this.push(''.padEnd(message.length * repeat, message))
+      cb()
+    },
+  })
 }
 
-greetCommand.command = 'greeting'
+greet.command = 'greet'
 
-greetCommand.options = {
+greet.options = {
   excited: {
     type: 'count',
     description: 'Is it an exciting message.',
@@ -46,4 +60,4 @@ greetCommand.options = {
   },
 }
 
-module.exports = greetCommand
+module.exports = greet

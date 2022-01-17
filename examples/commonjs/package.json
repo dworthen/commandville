@@ -1,0 +1,17 @@
+{
+  "name": "commonjs",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cmv": "cmv"
+  },
+  "author": "Derek Worthen <worthend.derek@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commandville": "workspace:*",
+    "@commandville/transform": "workspace:*"
+  }
+}

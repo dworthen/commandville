@@ -44,9 +44,9 @@ async function loadJson<T>(
 async function run(argv: string[]): Promise<void> {
   let commands: CommandLocation[] = []
   let config: CommandvilleConfig = {
-    loadEnv: true,
+    loadEnv: false,
     envPrefix: 'CMV',
-    envFile: 'cmv.env',
+    envFile: '.env',
     envCwd: process.cwd(),
   }
   const cmvPkg = JSON.parse(
