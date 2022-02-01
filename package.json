@@ -6,6 +6,7 @@
     "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "pnpm clean -r --parallel",
+    "typecheck": "pnpm typecheck -r --parallel",
     "build": "pnpm build -r --stream --filter ./packages",
     "docs:mkdir": "shx mkdir -p ../../docs/docs/api-input && shx mkdir -p ../../docs/docs/packages",
     "docs:build-packages": "pnpm run docs -r --stream --filter ./packages",
@@ -18,14 +19,14 @@
     "lint:check": "eslint \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "lint": "eslint --fix \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "lint-staged": "lint-staged",
-    "api:check": "pnpm api:check -r --filter ./packages",
-    "api": "pnpm api -r --filter ./packages",
-    "api:checkin": "git add ./packages/*/api/**",
-    "ci:staged": "run-s api api:checkin lint-staged",
+    "apiReport:check": "pnpm apiReport:check -r --filter ./packages",
+    "apiReport:generate": "pnpm apiReport:generate -r --parallel --filter ./packages",
+    "apiReport:checkin": "git add ./packages/*/apiReport/**",
+    "git:precommit": "run-s typecheck apiReport:generate apiReport:checkin lint-staged",
     "release:changeset": "changeset",
     "release:version": "changeset version",
-    "release:package": "pnpm release:package -r --filter ./packages",
-    "release:docs": "pnpm release --filter docs"
+    "release:docs": "pnpm release --filter docs",
+    "release:publish": "pnpm publish -r --access public"
   },
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
