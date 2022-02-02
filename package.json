@@ -29,6 +29,7 @@
     "release:publish": "pnpm publish -r --access public"
   },
   "devDependencies": {
+    "@changesets/changelog-git": "^0.1.9",
     "@changesets/cli": "^2.16.0",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
