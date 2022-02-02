@@ -3,8 +3,16 @@
   "version": "0.0.1",
   "description": "utility for creating Node branch streams.",
   "type": "module",
-  "exports": "./dist/index.js",
-  "types": "./dist/types/branch.d.ts",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "publishConfig": {
+    "types": "./dist/types/branch.d.ts"
+  },
+  "exports": {
+    ".": "./dist/esm/index.js",
+    "./package.json": "./package.json"
+  },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
@@ -16,21 +24,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "shx rm -rf dist",
-    "build:docs": "run-s out:docs move:docs",
     "typecheck": "tsc --noEmit",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:package": "esbuild src/**/*.ts --sourcemap --format=esm --platform=node --target=node14 --outdir=dist",
-    "build": "run-p api build:package",
-    "api:build": "api-extractor run",
-    "api": "run-s build:types \"api:build -- --local\"",
-    "api:check": "run-s build:types api:build",
-    "docs:mkdir": "shx mkdir -p ../../docs/docs/packages/branch",
-    "docs:copy": "shx cp -r ./docs/* ../../docs/docs/packages/branch/",
-    "docs": "run-s api docs:mkdir docs:copy",
-    "watch:types": "pnpm build:types -- --watch",
-    "watch:package": "pnpm build:package -- --watch",
-    "start": "run-p watch:types watch:package",
-    "release:package": "npm-publish --token $NPM_TOKEN --access public ./package.json"
+    "build:esm": "swc ./src --config-file ../../.swcrc -d ./dist/esm",
+    "build": "NODE_ENV=production run-p build:types build:esm",
+    "apiReport:run": "api-extractor run",
+    "apiReport:check": "run-s build:types apiReport:run",
+    "apiReport:generate": "run-s build:types \"apiReport:run -- --local\"",
+    "start": "NODE_ENV=development run-p \"build:types -- -w\" \"build:esm -- -w\""
   },
   "repository": {
     "type": "git",
@@ -51,8 +52,9 @@
     "@jsdevtools/npm-publish": "^1.4.3",
     "@microsoft/api-documenter": "^7.13.30",
     "@microsoft/api-extractor": "^7.18.1",
+    "@swc/cli": "^0.1.55",
+    "@swc/core": "^1.2.130",
     "@types/node": "^15.12.5",
-    "esbuild": "^0.12.12",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.3",
     "typescript": "^4.3.4"
