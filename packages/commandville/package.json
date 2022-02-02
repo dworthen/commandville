@@ -1,6 +1,6 @@
 {
   "name": "commandville",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "'CLI for running CLIs'",
   "type": "module",
   "main": "./dist/esm/index.js",
@@ -52,7 +52,7 @@
   },
   "homepage": "https://github.com/dworthen/commandville#readme",
   "dependencies": {
-    "@commandville/core": "workspace:^0.2.1",
+    "@commandville/core": "workspace:^0.3.0",
     "find-up": "^5.0.0"
   },
   "devDependencies": {

@@ -1,5 +1,11 @@
 # @commandville/pipeline
 
+## 0.1.0
+
+### Minor Changes
+
+- a289b85: Simplify tooling
+
 ## 0.0.3
 
 ### Patch Changes

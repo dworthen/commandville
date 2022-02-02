@@ -1,6 +1,6 @@
 {
   "name": "esm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "private": "true",
   "type": "module",
@@ -12,7 +12,7 @@
   "author": "Derek Worthen <worthend.derek@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "commandville": "workspace:^0.1.0",
-    "@commandville/transform": "workspace:^0.2.1"
+    "commandville": "workspace:^0.2.0",
+    "@commandville/transform": "workspace:^0.3.0"
   }
 }

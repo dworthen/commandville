@@ -1,5 +1,11 @@
 # @commandville/transform
 
+## 0.3.0
+
+### Minor Changes
+
+- a289b85: Simplify tooling
+
 ## 0.2.1
 
 ### Patch Changes

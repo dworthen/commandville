@@ -1,6 +1,6 @@
 {
   "name": "@commandville/pipeline",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Builds up a new pipeline out of existing streams.",
   "type": "module",
   "main": "./dist/esm/index.js",

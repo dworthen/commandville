@@ -1,5 +1,16 @@
 # commandville
 
+## 0.2.0
+
+### Minor Changes
+
+- a289b85: Simplify tooling
+
+### Patch Changes
+
+- Updated dependencies [a289b85]
+  - @commandville/core@0.3.0
+
 ## 0.1.0
 
 ### Minor Changes

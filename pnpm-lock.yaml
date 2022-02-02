@@ -77,16 +77,16 @@ importers:
 
   examples/commonjs:
     specifiers:
-      '@commandville/transform': workspace:*
-      commandville: workspace:*
+      '@commandville/transform': workspace:^0.2.1
+      commandville: workspace:^0.1.0
     dependencies:
       '@commandville/transform': link:../../packages/transform
       commandville: link:../../packages/commandville
 
   examples/esm:
     specifiers:
-      '@commandville/transform': workspace:*
-      commandville: workspace:*
+      '@commandville/transform': workspace:^0.2.1
+      commandville: workspace:^0.1.0
     dependencies:
       '@commandville/transform': link:../../packages/transform
       commandville: link:../../packages/commandville
@@ -115,7 +115,7 @@ importers:
 
   packages/commandville:
     specifiers:
-      '@commandville/core': ^0.2.0
+      '@commandville/core': workspace:^0.2.0
       '@jsdevtools/npm-publish': ^1.4.3
       '@microsoft/api-extractor': ^7.18.1
       '@swc/cli': ^0.1.55
