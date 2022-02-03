@@ -1,5 +1,19 @@
 # commandville
 
+## 0.3.0
+
+### Minor Changes
+
+- 84e2af3: chore: refactor documentation
+
+  - delete docs site
+  - use github readme and wiki for documentation
+
+### Patch Changes
+
+- Updated dependencies [84e2af3]
+  - @commandville/core@0.4.0
+
 ## 0.2.0
 
 ### Minor Changes
