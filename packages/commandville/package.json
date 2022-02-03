@@ -5,17 +5,17 @@
   "type": "module",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "publishConfig": {
-    "types": "dist/types/commandville.d.ts"
+    "types": "./dist/types/commandville.d.ts"
   },
   "exports": {
     ".": "./dist/esm/index.js",
     "./package.json": "./package.json"
   },
   "bin": {
-    "cmv": "./dist/index.js",
-    "commandville": "./dist/index.js"
+    "cmv": "./dist/esm/index.js",
+    "commandville": "./dist/esm/index.js"
   },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
@@ -53,7 +53,8 @@
   "homepage": "https://github.com/dworthen/commandville#readme",
   "dependencies": {
     "@commandville/core": "workspace:^0.3.0",
-    "find-up": "^5.0.0"
+    "@swc/helpers": "^0.3.2",
+    "find-up": "^6.2.0"
   },
   "devDependencies": {
     "@jsdevtools/npm-publish": "^1.4.3",
