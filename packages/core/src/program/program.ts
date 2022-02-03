@@ -30,7 +30,7 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   if (version != null) _setVersion()
   if (loadEnv) _loadEnv()
   if (config != null) _setConfig()
-  prog = prog.showHelpOnFail(false)
+  prog = prog.showHelpOnFail(true)
 
   commands.forEach(_loadCommand)
 

@@ -1,5 +1,5 @@
 import { CommandLocation, load } from '@commandville/core'
-import findUp from 'find-up'
+import { findUp } from 'find-up'
 import { existsSync, promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
@@ -44,13 +44,13 @@ async function loadJson<T>(
 async function run(argv: string[]): Promise<void> {
   let commands: CommandLocation[] = []
   let config: CommandvilleConfig = {
-    loadEnv: false,
+    loadEnv: true,
     envPrefix: 'CMV',
     envFile: '.env',
     envCwd: process.cwd(),
   }
   const cmvPkg = JSON.parse(
-    await fs.readFile(resolve(__dirname, '../package.json'), 'utf-8'),
+    await fs.readFile(resolve(__dirname, '../../package.json'), 'utf-8'),
   )
 
   const localPackageFilePath = await getFilePath('package.json')

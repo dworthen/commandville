@@ -47,7 +47,9 @@
     "url": "https://github.com/dworthen/commandville/issues"
   },
   "homepage": "https://github.com/dworthen/commandville#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@swc/helpers": "^0.3.2"
+  },
   "devDependencies": {
     "@jsdevtools/npm-publish": "^1.4.3",
     "@microsoft/api-documenter": "^7.13.30",

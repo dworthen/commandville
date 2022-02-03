@@ -1,0 +1,7 @@
+{
+  "dbUser": "user-from-config-file",
+  "db-password": "password-from-config-file",
+  "nested": {
+    "filepath": "cool"
+  }
+}

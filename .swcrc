@@ -1,11 +1,14 @@
 {
   "test": ".*.tsx?$",
   "jsc": {
+    "target": "es2019",
+    "keepClassNames": true,
+    "externalHelpers": true,
     "parser": {
       "syntax": "typescript",
-      "tsx": true,
+      "tsx": false,
       "decorators": false,
-      "dynamicImport": true
+      "dynamicImport": false
     }
   },
   "module": {
@@ -13,6 +16,7 @@
     "strict": false,
     "strictMode": true,
     "lazy": false,
-    "noInterop": false
+    "noInterop": false,
+    "ignoreDynamic": true
   }
 }

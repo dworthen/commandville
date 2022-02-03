@@ -6,7 +6,6 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "docs",
     "@examples/*"
   ]
 }
