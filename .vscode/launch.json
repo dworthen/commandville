@@ -9,8 +9,13 @@
       "request": "launch",
       "name": "TS",
       "console": "integratedTerminal",
-      "args": ["${relativeFile}"],
-      "runtimeArgs": ["--loader", "ts-node/esm"],
+      "args": [
+        "${relativeFile}"
+      ],
+      "runtimeArgs": [
+        "--loader",
+        "ts-node/esm"
+      ],
       "cwd": "${workspaceFolder}"
     }
   ]

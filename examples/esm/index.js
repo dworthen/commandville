@@ -1,9 +1,13 @@
 import { transform } from '@commandville/transform'
+import { Transform } from 'stream'
 
 export function greet({ excited, mark = '!', repeat = 1 }) {
   const values = []
   return transform(
-    (chunk) => {
+    function t(chunk) {
+      for (let i = 0; i < 5; i++) {
+        this.push(`testing: ${i}`)
+      }
       // Check if chunk is a buffer
       const isBuffer = Buffer.isBuffer(chunk)
       console.log(isBuffer)
@@ -12,7 +16,7 @@ export function greet({ excited, mark = '!', repeat = 1 }) {
       const value = isBuffer ? chunk.toString('utf-8') : chunk
       values.push(value)
     },
-    () => {
+    function flush() {
       const message = `${values.join(' ').replace(/\r?\n$/, '')}${
         excited ? ''.padEnd(excited, mark) : '.'
       }`
@@ -28,7 +32,7 @@ function toString() {
   })
 }
 
-greet.command = 'greet'
+greet.commandName = 'greet'
 greet.preprocess = toString()
 greet.options = {
   excited: {

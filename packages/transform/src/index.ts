@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import { Duplex, Transform } from 'stream'
+import { Transform } from 'stream'
 
 /**
  * @public
@@ -55,7 +55,7 @@ export type Flusher<R = unknown> = () => R | Promise<R>
 export function transform<T = unknown, R1 = unknown, R2 = unknown>(
   transformer?: ChunkTransformer<T, R1>,
   flusher?: Flusher<R2>,
-): Duplex {
+): Transform {
   return new Transform({
     objectMode: true,
     async transform(chunk, enc, cb) {
@@ -64,7 +64,7 @@ export function transform<T = unknown, R1 = unknown, R2 = unknown>(
         return
       }
       try {
-        const resultOrPromise = transformer(chunk)
+        const resultOrPromise = transformer.call(this, chunk)
         if (isPromise(resultOrPromise)) {
           const result = await resultOrPromise
           this.push(result)
@@ -82,7 +82,7 @@ export function transform<T = unknown, R1 = unknown, R2 = unknown>(
         return
       }
       try {
-        const resultOrPromise = flusher()
+        const resultOrPromise = flusher.call(this)
         if (isPromise(resultOrPromise)) {
           const result = await resultOrPromise
           result != null && this.push(result)

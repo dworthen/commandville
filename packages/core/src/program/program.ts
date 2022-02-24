@@ -18,19 +18,30 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   const {
     program,
     commands,
+    defaultCommand = '',
+    helpFlag: help,
+    description,
     version = '0',
     config,
-    loadEnv = false,
-    envPrefix = 'CMV',
-    envFile = '.env',
+    noUnknownOptions = false,
+    showHelpOnFailure = false,
   } = programDescription
+
+  const envConfig = {
+    loadEnv: false,
+    prefix: 'CLI',
+    files: [],
+    ...programDescription.env,
+  }
 
   let prog = yargs([]).scriptName(program)
 
   if (version != null) _setVersion()
-  if (loadEnv) _loadEnv()
+  if (envConfig.loadEnv) _loadEnv()
   if (config != null) _setConfig()
-  prog = prog.showHelpOnFail(true)
+  if (noUnknownOptions) prog.strictOptions(true)
+
+  prog = prog.showHelpOnFail(showHelpOnFailure)
 
   commands.forEach(_loadCommand)
 
@@ -39,13 +50,24 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   }
 
   function _loadEnv(): void {
-    if (envFile != null && existsSync(envFile)) {
-      const env = dotenv.config({
-        path: envFile,
-      })
-      dotenvExpand(env)
+    if (Array.isArray(envConfig.files) && envConfig.files.length > 0) {
+      let env: dotenv.DotenvConfigOutput | null = null
+      for (const filePath of envConfig.files) {
+        if (existsSync(filePath)) {
+          env = dotenv.config({
+            path: filePath,
+          })
+          dotenvExpand(env)
+        }
+      }
     }
-    prog = prog.env(envPrefix ?? '')
+    // if (envFile != null && envFile !== '' && existsSync(envFile)) {
+    //   const env = dotenv.config({
+    //     path: envFile,
+    //   })
+    //   dotenvExpand(env)
+    // }
+    prog = prog.env(envConfig.prefix ?? '')
   }
 
   function _setConfig(): void {
@@ -53,12 +75,18 @@ export function program(programDescription: ProgramDescription): ProgramParser {
   }
 
   function _loadCommand(cmd: Command): void {
-    const { command, aliases, description = '', deprecated, options } = cmd
+    const {
+      commandName: command,
+      aliases,
+      description = '',
+      deprecated,
+      options,
+    } = cmd
 
     prog = prog.command({
-      command,
+      command: command === defaultCommand ? [command, '$0'] : command,
+      describe: description,
       ...(nu(aliases) && { aliases }),
-      ...(nu(description) && { describe: description }),
       ...(nu(deprecated) && { deprecated }),
       ...(nu(options) && {
         builder: toYargsOptions(options as CommandOptions),
@@ -67,9 +95,13 @@ export function program(programDescription: ProgramDescription): ProgramParser {
     })
   }
 
+  prog.demandCommand()
+  // prog.usage(description!)
+  prog.help(help ?? 'help', description)
+
   return {
     async parse(argv: string[]): Promise<void> {
-      prog.parse(argv)
+      await prog.parseAsync(argv)
     },
   }
 }

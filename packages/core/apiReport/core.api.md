@@ -6,126 +6,108 @@
 
 /// <reference types="node" />
 
-import type { Choices } from 'yargs';
 import type { Duplex } from 'stream';
 
-// Warning: (ae-missing-release-tag) "AsyncParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CliPositionalArgumentAsyncParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type AsyncParser = (args: string[]) => Promise<string | void>;
+export type CliPositionalArgumentAsyncParser = (args: string[]) => Promise<string | void>;
 
-// Warning: (ae-missing-release-tag) "CliHandler" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CliPositionalArgumentStreamParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type CliHandler = (args: Record<string, unknown>) => Promise<void>;
+export type CliPositionalArgumentStreamParser = Duplex;
 
-// Warning: (ae-missing-release-tag) "CliParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CliPositionalArgumentSyncParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type CliParser = StreamParser | AsyncParser | Parser;
+export type CliPositionalArgumentSyncParser = (args: string[]) => string | void;
+
+// Warning: (ae-missing-release-tag) "CliPostionalArgumentParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CliPostionalArgumentParser = CliPositionalArgumentStreamParser | CliPositionalArgumentAsyncParser | CliPositionalArgumentSyncParser;
 
 // Warning: (ae-missing-release-tag) "Command" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Command<R extends StreamParser | AsyncParser | Parser = CliParser, T extends CommandConfig = CommandConfig> extends CommandDescription {
+export interface Command<ParsedCommandFlags extends Record<string, unknown> = Record<string, unknown>, CliPositionalArgumentParser extends CliPositionalArgumentStreamParser | CliPositionalArgumentAsyncParser | CliPositionalArgumentSyncParser = CliPostionalArgumentParser> extends CommandDescription {
     // (undocumented)
-    (configOptions: T): R;
-}
-
-// Warning: (ae-missing-release-tag) "CommandConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface CommandConfig {
-    // (undocumented)
-    [key: string]: unknown;
+    (commandFlags: ParsedCommandFlags): CliPositionalArgumentParser;
 }
 
 // Warning: (ae-missing-release-tag) "CommandDescription" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CommandDescription {
-    // (undocumented)
-    aliases?: string | string[];
-    // (undocumented)
-    command: string;
-    // (undocumented)
-    deprecated?: boolean;
-    // (undocumented)
+export type CommandDescription = {
+    commandName: string;
     description?: string;
-    // (undocumented)
+    aliases?: string[];
+    deprecated?: boolean;
     options?: CommandOptions;
-    // (undocumented)
-    postprocess?: Duplex;
-    // (undocumented)
     preprocess?: Duplex;
-}
+    postprocess?: Duplex;
+    disablePreprocess?: boolean;
+    disablePostprocess?: boolean;
+};
 
 // Warning: (ae-missing-release-tag) "CommandLocation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CommandLocation {
-    // (undocumented)
-    cwd?: string;
-    // (undocumented)
+export type CommandLocation = {
     filePathOrGlob: string;
-    // (undocumented)
     prefix?: string;
-}
+    cwd?: string;
+};
 
-// Warning: (ae-missing-release-tag) "CommandOption" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "CommandOptionDescription" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CommandOption {
-    // (undocumented)
-    aliases?: string | string[];
-    // (undocumented)
-    array?: boolean;
-    // (undocumented)
-    choices?: Choices;
-    // (undocumented)
-    coerce?: (arg: unknown) => unknown;
-    // (undocumented)
-    config?: boolean;
-    // (undocumented)
-    configParser?: (configPath: string) => object;
-    // (undocumented)
-    conflicts?: string | string[];
-    // (undocumented)
-    default?: unknown;
-    // (undocumented)
-    deprecated?: boolean;
-    // (undocumented)
+export type CommandOptionDescription = {
     description: string;
-    // (undocumented)
-    implies?: string | string;
-    // (undocumented)
-    nargs?: number;
-    // (undocumented)
-    normalize?: boolean;
-    // (undocumented)
-    required?: boolean;
-    // (undocumented)
-    requiresArgs?: boolean;
-    // (undocumented)
     type: 'string' | 'number' | 'boolean' | 'count';
-}
+    aliases?: string[];
+    array?: boolean;
+    choices?: Array<string | number>;
+    configParser?: (configPath: string) => object;
+    config?: boolean;
+    required?: boolean;
+    requiresArgs?: boolean;
+    coerce?: (arg: unknown) => unknown;
+    default?: unknown;
+    implies?: string | string;
+    conflicts?: string | string[];
+    nargs?: number;
+    normalize?: boolean;
+    deprecated?: boolean;
+};
 
 // Warning: (ae-missing-release-tag) "CommandOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type CommandOptions = Record<string, CommandOption>;
+export type CommandOptions = Record<string, CommandOptionDescription>;
 
-// Warning: (ae-missing-release-tag) "load" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "EnvConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function load(options: ProgramLoader): Promise<{
-    parse: (argv: string[]) => Promise<void>;
+export type EnvConfig = {
+    loadEnv?: boolean;
+    prefix?: string;
+    files?: string[];
+};
+
+// Warning: (ae-forgotten-export) The symbol "ExpandRecursively" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "ExtendedEnvConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ExtendedEnvConfig = ExpandRecursively<EnvConfig & {
+    cwd?: string;
 }>;
 
-// Warning: (ae-missing-release-tag) "Parser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "loadProgram" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type Parser = (args: string[]) => string | void;
+export function loadProgram(options: ProgramLoader): Promise<ProgramParser>;
 
 // Warning: (ae-missing-release-tag) "program" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -135,45 +117,33 @@ export function program(programDescription: ProgramDescription): ProgramParser;
 // Warning: (ae-missing-release-tag) "ProgramDescription" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ProgramDescription {
-    // (undocumented)
-    commands: Command[];
-    // (undocumented)
-    config?: Record<string, unknown>;
-    // (undocumented)
-    defaultCommand?: string;
-    // (undocumented)
-    envFile?: string;
-    // (undocumented)
-    envPrefix?: string;
-    // (undocumented)
-    loadEnv?: boolean;
-    // (undocumented)
+export type ProgramDescription = {
     program: string;
-    // (undocumented)
+    commands: Command[];
+    defaultCommand?: string;
+    description?: string;
+    helpFlag?: string;
     version?: string;
-}
+    config?: Record<string, unknown>;
+    noUnknownOptions?: boolean;
+    env?: EnvConfig;
+    showHelpOnFailure?: boolean;
+};
 
 // Warning: (ae-missing-release-tag) "ProgramLoader" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ProgramLoader extends Omit<ProgramDescription, 'commands'> {
-    // (undocumented)
+export type ProgramLoader = ExpandRecursively<Omit<ProgramDescription, 'commands' | 'env'> & {
     commands: Array<CommandLocation | string>;
-}
+    env?: ExtendedEnvConfig;
+}>;
 
 // Warning: (ae-missing-release-tag) "ProgramParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ProgramParser {
-    // (undocumented)
+export type ProgramParser = {
     parse: (argv: string[]) => Promise<void>;
-}
-
-// Warning: (ae-missing-release-tag) "StreamParser" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export type StreamParser = Duplex;
+};
 
 // (No @packageDocumentation comment for this package)
 

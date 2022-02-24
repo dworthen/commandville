@@ -13,11 +13,10 @@
     "format": "prettier --write \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "lint:check": "eslint \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
     "lint": "eslint --fix \"./packages/*/src/**/*.{js,jsx,ts,tsx}\"",
-    "lint-staged": "lint-staged",
     "apiReport:check": "pnpm apiReport:check -r --filter ./packages",
     "apiReport:generate": "pnpm apiReport:generate -r --parallel --filter ./packages",
     "apiReport:checkin": "git add ./packages/*/apiReport/**",
-    "git:precommit": "run-s typecheck apiReport:generate apiReport:checkin lint-staged",
+    "git:precommit": "lint-staged",
     "release:changeset": "changeset",
     "release:version": "changeset version",
     "release:docs": "pnpm release --filter docs",
@@ -41,7 +40,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "shx": "^0.3.3",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.4.0",
     "typescript": "^4.2.4"
   }
 }

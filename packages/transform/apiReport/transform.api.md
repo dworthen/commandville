@@ -6,7 +6,7 @@
 
 /// <reference types="node" />
 
-import { Duplex } from 'stream';
+import { Transform } from 'stream';
 
 // @public (undocumented)
 export type ChunkTransformer<T = unknown, R = unknown> = (chunk: T) => R | Promise<R>;
@@ -15,6 +15,6 @@ export type ChunkTransformer<T = unknown, R = unknown> = (chunk: T) => R | Promi
 export type Flusher<R = unknown> = () => R | Promise<R>;
 
 // @public
-export function transform<T = unknown, R1 = unknown, R2 = unknown>(transformer?: ChunkTransformer<T, R1>, flusher?: Flusher<R2>): Duplex;
+export function transform<T = unknown, R1 = unknown, R2 = unknown>(transformer?: ChunkTransformer<T, R1>, flusher?: Flusher<R2>): Transform;
 
 ```

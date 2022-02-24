@@ -1,7 +1,7 @@
 import { Duplex, PassThrough } from 'stream'
 
 export type Predicate = () => boolean
-export interface Condition {
+export type Condition = {
   condition: Predicate | boolean
   pipeline: Duplex
 }

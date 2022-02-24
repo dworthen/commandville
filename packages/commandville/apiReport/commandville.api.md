@@ -4,6 +4,13 @@
 
 ```ts
 
+import { ProgramLoader } from '@commandville/core';
+
+// Warning: (ae-missing-release-tag) "CommandvilleConfig" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CommandvilleConfig = ProgramLoader;
+
 // (No @packageDocumentation comment for this package)
 
 ```

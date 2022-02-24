@@ -16,12 +16,10 @@ export function branch(...conditions: Condition[]): Duplex;
 // Warning: (ae-missing-release-tag) "Condition" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface Condition {
-    // (undocumented)
+export type Condition = {
     condition: Predicate | boolean;
-    // (undocumented)
     pipeline: Duplex;
-}
+};
 
 // Warning: (ae-missing-release-tag) "Predicate" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

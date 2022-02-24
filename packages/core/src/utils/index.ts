@@ -1,7 +1,7 @@
 import { fstatSync } from 'fs'
 import { Transform } from 'stream'
 
-import { AsyncParser } from '../command/types.js'
+import { CliPositionalArgumentAsyncParser } from '../command/types.js'
 import { streamArgs } from '../stream/index.js'
 
 export function nu(arg: any): boolean {
@@ -17,7 +17,7 @@ export function isStdinPiped(): boolean {
   }
 }
 
-export function isPromise(arg: any): arg is AsyncParser {
+export function isPromise(arg: any): arg is CliPositionalArgumentAsyncParser {
   return arg?.then != null && typeof arg.then === 'function'
 }
 
@@ -39,3 +39,17 @@ export async function loadArgs(): Promise<string[]> {
 
   return await promise
 }
+
+export function toGlobPattern(filePath: string): string {
+  return filePath.replace(/\\/g, '/')
+}
+
+export function isTsEnabled(): boolean {
+  return /--loader(=|\s+)ts-node\/esm/i.test(process.env.NODE_OPTIONS ?? '')
+}
+
+export type ExpandRecursively<T> = T extends object
+  ? T extends infer O
+    ? { [K in keyof O]: ExpandRecursively<O[K]> }
+    : never
+  : T

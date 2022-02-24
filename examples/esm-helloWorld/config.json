@@ -1,4 +1,5 @@
 {
+  "greeting": "greeting from config",
   "dbUser": "user-from-config-file",
   "db-password": "password-from-config-file",
   "nested": {

@@ -1,4 +1,6 @@
-import { CommandLocation, load } from '@commandville/core'
+#!/usr/bin/env node
+
+import { loadProgram, ProgramLoader } from '@commandville/core'
 import { findUp } from 'find-up'
 import { existsSync, promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
@@ -7,14 +9,7 @@ import { fileURLToPath } from 'url'
 // eslint-disable-next-line
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-interface CommandvilleConfig {
-  commands?: string[]
-  config?: Record<string, unknown>
-  loadEnv?: boolean
-  envPrefix?: string
-  envFile?: string
-  envCwd?: string
-}
+export type CommandvilleConfig = ProgramLoader
 
 function isTsEnabled(): boolean {
   return /--loader(=|\s+)ts-node\/esm/i.test(process.env.NODE_OPTIONS ?? '')
@@ -24,10 +19,11 @@ async function getFilePath(
   filename: string,
   cwd?: string,
 ): Promise<string | undefined> {
-  return await findUp(filename, {
+  const filePath = await findUp(filename, {
     type: 'file',
     cwd,
   })
+  return filePath
 }
 
 async function loadJson<T>(
@@ -38,64 +34,76 @@ async function loadJson<T>(
 
   const json = JSON.parse(await fs.readFile(filePath, 'utf-8'))
 
-  return (key != null ? json[key] : json) as T
+  return (key != null ? json[key] : json) as T | undefined
 }
 
 async function run(argv: string[]): Promise<void> {
-  let commands: CommandLocation[] = []
-  let config: CommandvilleConfig = {
-    loadEnv: true,
-    envPrefix: 'CMV',
-    envFile: '.env',
-    envCwd: process.cwd(),
-  }
+  let config: Partial<CommandvilleConfig> = {}
+
   const cmvPkg = JSON.parse(
     await fs.readFile(resolve(__dirname, '../../package.json'), 'utf-8'),
   )
-
   const localPackageFilePath = await getFilePath('package.json')
   const localDotFilePath = await getFilePath('.commandville.json')
 
-  if (localPackageFilePath != null)
-    await _loadConfigFile(localPackageFilePath, 'commandville')
-
-  if (localDotFilePath != null) await _loadConfigFile(localDotFilePath)
-
-  if (commands.length === 0) _setDefaultCommand()
-
-  function _setDefaultCommand(): void {
-    commands.push({
-      filePathOrGlob: `./*.{mjs,js${isTsEnabled() ? ',ts' : ''}}`,
-      cwd: process.cwd(),
-    })
+  if (localPackageFilePath != null) {
+    config =
+      (await loadJson<CommandvilleConfig>(
+        localPackageFilePath,
+        'commandville',
+      )) ?? config
   }
 
-  async function _loadConfigFile(path: string, key?: string): Promise<void> {
-    const localConfig = await loadJson<CommandvilleConfig>(path, key)
-    _setCommands(dirname(path), localConfig)
-  }
-  function _setCommands(cwd: string, localConfig?: CommandvilleConfig): void {
-    commands =
-      localConfig?.commands?.map((filePathOrGlob) => ({
-        filePathOrGlob,
-        cwd,
-      })) ?? commands
-    config = {
-      ...config,
-      ...localConfig,
-    }
+  if (localDotFilePath != null) {
+    config = (await loadJson<CommandvilleConfig>(localDotFilePath)) ?? config
   }
 
-  const { parse } = await load({
-    commands,
-    program: 'cmv',
-    version: cmvPkg.version,
+  if (config.commands == null || config.commands.length === 0) {
+    config.commands = [
+      {
+        filePathOrGlob: `./*.{cjs,mjs,js${isTsEnabled() ? ',ts' : ''}}`,
+        cwd: process.cwd(),
+      },
+    ]
+  }
+
+  const envConfig = {
+    loadEnv: true,
+    prefix: 'CMV',
+    files: ['.env'],
+    cwd: process.cwd(),
+    ...config?.env,
+  }
+
+  // async function _loadConfigFile(path: string, key?: string): Promise<void> {
+  //   const localConfig = await loadJson<CommandvilleConfig>(path, key)
+  //   _setCommands(dirname(path), localConfig)
+  // }
+
+  // function _setCommands(cwd: string, localConfig?: CommandvilleConfig): void {
+  //   commands =
+  //     localConfig?.commands?.map((filePathOrGlob) => ({
+  //       filePathOrGlob,
+  //       cwd,
+  //     })) ?? commands
+
+  //   config = {
+  //     ...config,
+  //     ...localConfig,
+  //   }
+  // }
+
+  const { parse } = await loadProgram({
     ...config,
+    commands: config.commands,
+    env: envConfig,
+    program: 'cmv',
+    description: 'Commandville',
+    noUnknownOptions: false,
+    version: cmvPkg.version ?? '0',
   })
 
   await parse(argv)
 }
 
-run(process.argv.slice(2)).catch((ex) => {
-  throw ex
-})
+await run(process.argv.slice(2))

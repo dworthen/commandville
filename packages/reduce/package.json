@@ -1,0 +1,64 @@
+{
+  "name": "@commandville/reduce",
+  "version": "0.0.1",
+  "description": "Reduce over a node stream",
+  "type": "module",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "publishConfig": {
+    "types": "./dist/types/reduce.d.ts"
+  },
+  "exports": {
+    ".": "./dist/esm/index.js",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "shx rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "build:tsc": "tsc --emitDeclarationOnly",
+    "build:types": "run-s build:tsc apiReport:generate",
+    "build:esm": "swc ./src --config-file ../../.swcrc -d ./dist/esm",
+    "build": "NODE_ENV=production run-p build:types build:esm",
+    "apiReport:run": "api-extractor run",
+    "apiReport:check": "run-s build:types apiReport:run",
+    "apiReport:generate": "run-s \"apiReport:run -- --local\"",
+    "start": "NODE_ENV=development run-p \"build:tsc -- -w\" \"build:esm -- -w\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dworthen/commandville.git"
+  },
+  "keywords": [
+    "stream",
+    "reduce"
+  ],
+  "author": "Derek Worthen <worthend.derek@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dworthen/commandville/issues"
+  },
+  "homepage": "https://github.com/dworthen/commandville#readme",
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.18.1",
+    "@swc/cli": "^0.1.55",
+    "@types/node": "^16.11.22",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.3",
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "@swc/core": "^1.2.136",
+    "@swc/helpers": "^0.3.2",
+    "@commandville/transform": "workspace:^0.4.0"
+  }
+}

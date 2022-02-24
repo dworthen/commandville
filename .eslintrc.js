@@ -8,7 +8,11 @@ module.exports = {
     'sort-imports': 'off',
     'import/order': 'off',
     'simple-import-sort/imports': 'error',
+    'no-void': 'off',
     '@typescript-eslint/space-before-function-paren': 'off',
     '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off',
+    '@typescript-eslint/consistent-type-definitions': 'off',
   },
 }

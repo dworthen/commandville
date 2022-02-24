@@ -1,12 +1,10 @@
 import type { Duplex } from 'stream'
-import type { Choices } from 'yargs'
-
-export interface CommandOption {
+export type CommandOptionDescription = {
   description: string
   type: 'string' | 'number' | 'boolean' | 'count'
-  aliases?: string | string[]
+  aliases?: string[]
   array?: boolean
-  choices?: Choices
+  choices?: Array<string | number>
   configParser?: (configPath: string) => object
   config?: boolean
   required?: boolean
@@ -20,36 +18,44 @@ export interface CommandOption {
   deprecated?: boolean
 }
 
-export type CommandOptions = Record<string, CommandOption>
+export type CommandOptions = Record<string, CommandOptionDescription>
 
-export interface CommandConfig {
-  [key: string]: unknown
-}
+// export interface ParsedCommandFlags {
+//   [key: string]: unknown
+// }
 
-export type StreamParser = Duplex
+export type CliPositionalArgumentStreamParser = Duplex
+
+export type CliPositionalArgumentAsyncParser = (
+  args: string[],
+  // eslint-disable-next-line
+) => Promise<string | void>
 
 // eslint-disable-next-line
-export type AsyncParser = (args: string[]) => Promise<string | void>
+export type CliPositionalArgumentSyncParser = (args: string[]) => string | void
+export type CliPostionalArgumentParser =
+  | CliPositionalArgumentStreamParser
+  | CliPositionalArgumentAsyncParser
+  | CliPositionalArgumentSyncParser
 
-// eslint-disable-next-line
-export type Parser = (args: string[]) => string | void
-export type CliParser = StreamParser | AsyncParser | Parser
-
-export interface CommandDescription {
-  command: string
+export type CommandDescription = {
+  commandName: string
   description?: string
-  aliases?: string | string[]
+  aliases?: string[]
   deprecated?: boolean
   options?: CommandOptions
   preprocess?: Duplex
   postprocess?: Duplex
+  disablePreprocess?: boolean
+  disablePostprocess?: boolean
 }
 
 export interface Command<
-  R extends StreamParser | AsyncParser | Parser = CliParser,
-  T extends CommandConfig = CommandConfig,
+  ParsedCommandFlags extends Record<string, unknown> = Record<string, unknown>,
+  CliPositionalArgumentParser extends
+    | CliPositionalArgumentStreamParser
+    | CliPositionalArgumentAsyncParser
+    | CliPositionalArgumentSyncParser = CliPostionalArgumentParser,
 > extends CommandDescription {
-  (configOptions: T): R
+  (commandFlags: ParsedCommandFlags): CliPositionalArgumentParser
 }
-
-export type CliHandler = (args: Record<string, unknown>) => Promise<void> // eslint-disable-line
