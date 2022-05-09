@@ -11,9 +11,6 @@ import type { Command, CommandOptions } from '../command/types'
 import { nu } from '../utils/index.js'
 import type { ProgramDescription, ProgramParser } from './types'
 
-// eslint-disable-next-line
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
 export function program(programDescription: ProgramDescription): ProgramParser {
   const {
     program,

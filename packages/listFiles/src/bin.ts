@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url'
 import { listFiles } from './index.js'
 
 // eslint-disable-next-line
-const __dirname = dirname(fileURLToPath(import.meta.url))
+// const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const prog = program({
   program: 'list-files <directories_or_glob_patterns...> [options]',

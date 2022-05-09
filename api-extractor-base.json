@@ -127,7 +127,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<projectFolder>/etc/"
      */
-    "reportFolder": "<projectFolder>/apiReport/"
+    "reportFolder": "<projectFolder>/api/"
     /**
      * Specifies the folder where the temporary report file is written.  The file name portion is determined by
      * the "reportFileName" setting.
@@ -150,7 +150,7 @@
     /**
      * (REQUIRED) Whether to generate a doc model file.
      */
-    "enabled": false,
+    "enabled": true
     /**
      * The output path for the doc model file.  The file extension should be ".api.json".
      *
@@ -169,7 +169,7 @@
     /**
      * (REQUIRED) Whether to generate the .d.ts rollup file.
      */
-    "enabled": true,
+    "enabled": false,
     /**
      * Specifies the output path for a .d.ts rollup file to be generated without any trimming.
      * This file will include all declarations that are exported by the main entry point.
@@ -288,7 +288,7 @@
          *
          * DEFAULT VALUE: false
          */
-        "addToApiReportFile": true
+        "addToApiReportFile": false
       }
       // "TS2551": {
       //   "logLevel": "warning",

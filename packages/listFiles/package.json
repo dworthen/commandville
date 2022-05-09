@@ -2,20 +2,17 @@
   "name": "@commandville/list-files",
   "version": "0.0.1",
   "description": "List files",
-  "type": "module",
-  "main": "./dist/esm/index.js",
+  "type": "commonjs",
+  "main": "./dist/cjs/index.cjs",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
-  "publishConfig": {
-    "types": "./dist/types/list-files.d.ts"
-  },
   "exports": {
-    ".": "./dist/esm/index.js",
+    ".": "./dist/cjs/index.cjs",
     "./package.json": "./package.json"
   },
   "bin": {
-    "list-files": "./dist/esm/bin.js",
-    "lf": "./dist/esm/bin.js"
+    "list-files": "./dist/cjs/bin.cjs",
+    "lf": "./dist/cjs/bin.cjs"
   },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
@@ -28,16 +25,17 @@
   "scripts": {
     "lf": "node ./dist/esm/bin.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "shx rm -rf dist",
+    "clean": "shx rm -rf dist temp",
     "typecheck": "tsc --noEmit",
-    "build:tsc": "tsc --emitDeclarationOnly",
-    "build:types": "run-s build:tsc apiReport:generate",
-    "build:esm": "swc ./src --config-file ../../.swcrc -d ./dist/esm",
-    "build": "NODE_ENV=production run-p build:types build:esm",
-    "apiReport:run": "api-extractor run",
-    "apiReport:check": "run-s build:types apiReport:run",
-    "apiReport:generate": "run-s \"apiReport:run -- --local\"",
-    "start": "NODE_ENV=development run-p \"build:tsc -- -w\" \"build:esm -- -w\""
+    "apiReport": "api-extractor run",
+    "apiReport:docs": "api-documenter markdown -i ./temp -o ./docs && shx mv ./docs/index.md ./docs/README.md",
+    "apiReport:check": "run-s build:types apiReport",
+    "build:apiReport": "run-s build:types \"apiReport -- --local\" \"apiReport:docs\"",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:cjs": "esbuild ./src/bin.ts --sourcemap --bundle --platform=node --format=cjs --target=node16 --outfile=./dist/cjs/bin.cjs",
+    "build:esm": "esbuild ./src/**/*.ts --sourcemap --platform=node --format=esm --target=node16 --outdir=./dist/esm",
+    "build": "NODE_ENV=production run-p build:apiReport build:cjs",
+    "start": "NODE_ENV=development run-p \"build:types -- -w\" \"build:cjs -- --watch\""
   },
   "repository": {
     "type": "git",
@@ -54,21 +52,22 @@
   },
   "homepage": "https://github.com/dworthen/commandville#readme",
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.18.1",
-    "@swc/cli": "^0.1.55",
+    "@microsoft/api-documenter": "^7.13.30",
+    "@microsoft/api-extractor": "^7.18.4",
     "@types/is-glob": "^4.0.2",
     "@types/micromatch": "^4.0.2",
     "@types/node": "^16.11.22",
+    "c8": "^7.11.2",
+    "esbuild": "^0.14.38",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.3",
+    "tap": "^16.2.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.3.4"
   },
   "dependencies": {
     "@commandville/core": "workspace:^0.4.0",
     "@commandville/transform": "workspace:^0.4.0",
-    "@swc/core": "^1.2.136",
-    "@swc/helpers": "^0.3.2",
     "is-glob": "^4.0.3",
     "micromatch": "^4.0.4"
   }

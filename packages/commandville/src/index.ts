@@ -7,7 +7,7 @@ import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 // eslint-disable-next-line
-const __dirname = dirname(fileURLToPath(import.meta.url))
+// const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export type CommandvilleConfig = ProgramLoader
 
